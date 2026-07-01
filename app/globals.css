@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-cairo), sans-serif;
+  background-color: #FBF9F5;
+  color: #1C2127;
+}
+
+::selection {
+  background: #C8A44D;
+  color: #0B1C2C;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #F3ECE1; }
+::-webkit-scrollbar-thumb { background: #C8A44D; border-radius: 8px; }
+
+@layer utilities {
+  /* The signature device of this site: a mihrab / Islamic-arch silhouette
+     used to frame photography instead of plain rectangles. */
+  .arch-frame {
+    clip-path: path("M0,420 L0,140 C0,62 67,0 150,0 C233,0 300,62 300,140 L300,420 Z");
+  }
+  .arch-frame-sm {
+    clip-path: path("M0,300 L0,100 C0,44 48,0 107,0 C166,0 214,44 214,100 L214,300 Z");
+  }
+  .arch-frame-wide {
+    clip-path: path("M0,260 L0,86 C0,38 70,0 156,0 C242,0 312,38 312,86 L312,260 Z");
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .glass-light {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(90deg, #E2C580 0%, #C8A44D 50%, #9C7C32 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .divider-ornament {
+    position: relative;
+  }
+  .divider-ornament::before,
+  .divider-ornament::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #C8A44D);
+  }
+  .divider-ornament::before { right: calc(100% + 14px); }
+  .divider-ornament::after { left: calc(100% + 14px); background: linear-gradient(90deg, #C8A44D, transparent); }
+
+  .bg-noise {
+    background-image: radial-gradient(circle at 1px 1px, rgba(11,28,44,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
