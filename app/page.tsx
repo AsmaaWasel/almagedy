@@ -1,9 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Experience from "@/components/Experience";
-import Programs from "@/components/Programs";
+
 import Buses from "@/components/Buses";
-import Testimonials from "@/components/Testimonials";
+
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
@@ -15,13 +15,11 @@ export default function Home() {
     <main className="overflow-x-hidden">
       <Navbar />
       <Hero />
-      {/* <Experience /> */}
-      {/* <Programs /> */}
 
       <Buses />
       <Hotels />
       <VIPBuses />
-      {/* <Testimonials /> */}
+
       <CTA />
       <Footer />
       <WhatsAppFloat />
