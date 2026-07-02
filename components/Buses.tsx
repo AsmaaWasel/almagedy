@@ -183,7 +183,7 @@ export default function Buses() {
           </a>
         </motion.div>
 
-        {/* Trip programs - 4 صور */}
+        {/* Trip programs - 4 صور مربعة */}
         <div id="Programs" className="mt-20">
           <div className="mx-auto mb-10 max-w-3xl text-center">
             <h3 className="text-2xl font-extrabold text-night lg:text-3xl">
@@ -216,8 +216,11 @@ export default function Buses() {
                 transition={{ delay: i * 0.08, duration: 0.6 }}
                 className="group relative overflow-hidden rounded-3xl bg-white shadow-soft transition-transform duration-300 hover:-translate-y-2"
               >
-                {/* صورة البرنامج */}
-                <div className="relative h-48 w-full overflow-hidden">
+                {/* صورة البرنامج - مربعة */}
+                <div
+                  className="relative w-full overflow-hidden"
+                  style={{ aspectRatio: "1/1" }}
+                >
                   <div
                     className="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                     style={{ backgroundImage: `url('${p.image}')` }}
