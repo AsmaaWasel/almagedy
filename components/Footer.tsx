@@ -43,7 +43,9 @@ export default function Footer() {
             <p className="mb-4 text-sm font-bold text-white">معلومات التواصل</p>
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2">
-                <MapPin size={15} /> الرياض، المملكة العربية السعودية
+                <MapPin size={15} />
+                البطحاء، بجوار مؤسسة النقد العربي، الرياض، المملكة العربية
+                السعودية
               </li>
               <li className="flex items-center gap-2">
                 <Phone size={15} /> ٩٦٦٥٠٧٦٣٤١٨١+

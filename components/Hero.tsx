@@ -12,6 +12,9 @@ import {
   Facebook,
   Instagram,
   Music2,
+  Bus,
+  Hotel,
+  CalendarDays,
 } from "lucide-react";
 
 function useParallax() {
@@ -106,6 +109,7 @@ export default function Hero() {
             نجوم , 5 نجوم حسب الطلب من العملاء والميزانية .
           </p>
 
+          {/* الأزرار الرئيسية */}
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <a
               href="#contact"
@@ -126,7 +130,50 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Animated stats */}
+          {/* الأزرار الثلاثة الجديدة: الباصات، الفنادق، البرامج */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.7 }}
+            className="mt-6 flex flex-wrap items-center gap-3"
+          >
+            {/* زر الباصات */}
+            <a
+              href="/buses"
+              className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold hover:text-night sm:text-sm sm:px-6 sm:py-3"
+            >
+              <Bus
+                size={16}
+                className="text-gold transition-colors duration-300 group-hover:text-night"
+              />
+              الباصات
+            </a>
+
+            {/* زر الفنادق */}
+            <a
+              href="/vip"
+              className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold hover:text-night sm:text-sm sm:px-6 sm:py-3"
+            >
+              <Hotel
+                size={16}
+                className="text-gold transition-colors duration-300 group-hover:text-night"
+              />
+              الفنادق
+            </a>
+
+            {/* زر البرامج */}
+            <a
+              href="/Programs"
+              className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold hover:text-night sm:text-sm sm:px-6 sm:py-3"
+            >
+              <CalendarDays
+                size={16}
+                className="text-gold transition-colors duration-300 group-hover:text-night"
+              />
+              البرامج
+            </a>
+          </motion.div>
+
           {/* Social Media Links */}
           <div className="mt-14 border-t border-white/10 pt-8">
             <p className="mb-5 text-sm font-semibold text-white/70">
