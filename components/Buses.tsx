@@ -20,6 +20,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const WHATSAPP = "https://wa.me/966507634181";
 const PHONE = "tel:+966507634181";
@@ -44,58 +45,42 @@ const busSpecs = [
   {
     icon: Bath,
     label: "دورة مياه داخل الباص",
-    desc: "راحة كاملة دون توقف أثناء الطريق",
+    desc: "",
   },
 ];
 
+// تغيير إلى 3 صور فقط للباصات
 const fleetGallery = [
   "/buses/bus1.jpeg",
   "/buses/bus2.jpeg",
   "/buses/bus3.jpeg",
-  "/buses/bus4.jpeg",
-  "/buses/bus5.jpeg",
-  "/buses/bus6.jpeg",
-  "/buses/bus7.jpeg",
-  "/buses/bus8.jpeg",
-  "/buses/bus9.jpeg",
-  "/buses/bus10.jpeg",
-  "/buses/bus11.jpeg",
-  "/buses/bus12.jpeg",
 ];
 
-/* ---------- Trip programs ---------- */
-const tripPrograms = [
-  { days: "برنامج 3 أيام", route: "مكة والمدينة" },
-  { days: "برنامج 3 أيام", route: "مكة فقط" },
-  { days: "برنامج 4 أيام", route: "مكة والمدينة / أو مكة فقط" },
-  { days: "برنامج 5 أيام", route: "مكة والمدينة / أو مكة فقط" },
-];
-
-/* ---------- VIP hotel options ---------- */
-const vipHotels = [
+/* ---------- Trip programs - تغيير إلى صور ---------- */
+const programImages = [
   {
-    name: "فندق ڤوكو إنتركونتيننتال مكة",
-    stars: "5 نجوم",
-    rooms: "غرف VIP",
-    location: "شارع إبراهيم الخليل — 5 دقائق بالباص من الحرم",
-    perks: [
-      "استقبال VIP",
-      "حضانة أطفال",
-      "نادي رياضي على حساب العميل",
-      "مطاعم متنوعة وكافيهات",
-      "توصيل مجاني 24 ساعة للحرم والعودة",
-    ],
+    image: "programs/program1.jpeg",
+    title: "برنامج 3 أيام",
+    subtitle: "مكة والمدينة",
+    bg: "from-amber-500/20 to-orange-500/20",
   },
   {
-    name: "فندق ميلينيوم مكة",
-    stars: "5 نجوم — تصنيف وزارة السياحة",
-    rooms: "غرف ثلاثية ورباعية",
-    location: "شارع إبراهيم الخليل",
-    perks: [
-      "نظافة واهتمام VIP",
-      "مطاعم متنوعة على حساب العميل",
-      "توصيل مجاني 24 ساعة للحرم والعودة",
-    ],
+    image: "programs/program2.jpeg",
+    title: "برنامج 3 أيام",
+    subtitle: "مكة فقط",
+    bg: "from-emerald-500/20 to-teal-500/20",
+  },
+  {
+    image: "programs/program3.jpeg",
+    title: "برنامج 4 أيام",
+    subtitle: "مكة والمدينة",
+    bg: "from-purple-500/20 to-pink-500/20",
+  },
+  {
+    image: "programs/program4.jpeg",
+    title: "برنامج 5 أيام",
+    subtitle: "مكة والمدينة",
+    bg: "from-blue-500/20 to-cyan-500/20",
   },
 ];
 
@@ -138,26 +123,24 @@ export default function Buses() {
           ))}
         </div>
 
-        {/* Fleet image gallery — asymmetrical layered composition */}
+        {/* Fleet image gallery — 3 صور فقط */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8 }}
-          className="mt-16 grid grid-cols-2 gap-5 lg:grid-cols-4"
+          className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-3"
         >
           {fleetGallery.map((src, i) => (
             <div
               key={src}
               className={cn(
                 "group relative overflow-hidden rounded-[1.75rem] shadow-soft",
-                i === 0
-                  ? "col-span-2 row-span-2 h-72 lg:h-[22rem]"
-                  : "h-44 lg:h-[10.4rem]",
+                i === 0 ? "md:col-span-1" : "md:col-span-1",
               )}
             >
               <div
-                className="h-full w-full scale-105 bg-cover bg-center transition-transform duration-700 group-hover:scale-115"
+                className="h-64 w-full scale-105 bg-cover bg-center transition-transform duration-700 group-hover:scale-115 md:h-72"
                 style={{ backgroundImage: `url('${src}')` }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-night/50 via-transparent to-transparent" />
@@ -200,7 +183,7 @@ export default function Buses() {
           </a>
         </motion.div>
 
-        {/* Trip programs */}
+        {/* Trip programs - 4 صور */}
         <div id="Programs" className="mt-20">
           <div className="mx-auto mb-10 max-w-3xl text-center">
             <h3 className="text-2xl font-extrabold text-night lg:text-3xl">
@@ -224,22 +207,40 @@ export default function Buses() {
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {tripPrograms.map((p, i) => (
+            {programImages.map((p, i) => (
               <motion.div
-                key={p.days + p.route}
+                key={p.title + p.subtitle}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08, duration: 0.6 }}
-                className="rounded-3xl border border-night/5 bg-white p-6 shadow-soft transition-transform duration-300 hover:-translate-y-1"
+                className="group relative overflow-hidden rounded-3xl bg-white shadow-soft transition-transform duration-300 hover:-translate-y-2"
               >
-                <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-sky/15 text-sky-dark">
-                  <MapPin size={18} />
-                </span>
+                {/* صورة البرنامج */}
+                <div className="relative h-48 w-full overflow-hidden">
+                  <div
+                    className="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                    style={{ backgroundImage: `url('${p.image}')` }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                </div>
 
-                <p className="font-bold text-night">{p.days}</p>
-
-                <p className="mt-1 text-sm leading-6 text-ink/60">{p.route}</p>
+                {/* محتوى البرنامج */}
+                <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-3 py-1 text-xs font-semibold text-gold backdrop-blur-sm">
+                      <CalendarDays size={12} />
+                      {p.title}
+                    </span>
+                  </div>
+                  <p className="text-lg font-bold leading-tight">
+                    {p.subtitle}
+                  </p>
+                  <div className="mt-2 flex items-center gap-2 text-xs text-white/70">
+                    <MapPin size={14} />
+                    <span>رحلة عمرة</span>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>

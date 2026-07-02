@@ -53,7 +53,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative flex h-[100vh] min-h-[760px] w-full items-center overflow-hidden bg-night"
+      className="relative flex min-h-[100dvh] w-full items-center overflow-hidden bg-night py-28 lg:h-[100vh] lg:min-h-[760px] lg:py-0"
     >
       {/* Cinematic background */}
       <div
@@ -83,12 +83,13 @@ export default function Hero() {
         </svg>
       </div>
 
-      <div className="container relative z-10 grid items-center gap-12 pt-16 lg:grid-cols-[1.1fr,0.9fr]">
+      <div className="container relative z-10 grid items-center gap-8 lg:grid-cols-[1.1fr,0.9fr] lg:gap-12 lg:pt-16">
         {/* Text content */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="order-2 lg:order-1"
         >
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-white/5 px-4 py-2 text-xs font-semibold tracking-wide text-gold-light backdrop-blur-md">
             <Star size={14} className="fill-gold text-gold" />
@@ -101,8 +102,8 @@ export default function Hero() {
           </h1>
 
           <p className="mt-6 max-w-xl text-base leading-8 text-white/70 sm:text-lg">
-            نرافقكم خطوة بخطوة في رحلة روحانية استثنائية، من إقامة فندقية خمس
-            نجوم إطلالتها على الحرم، إلى إشراف كامل وضيافة أصيلة .
+            نرافقكم خطوة بخطوة في رحلة روحانية استثنائية، فنادق متنوعة 3 نجوم ,4
+            نجوم , 5 نجوم حسب الطلب من العملاء والميزانية .
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -240,17 +241,17 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.92, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="relative hidden lg:block"
+          className="relative order-1 flex justify-center lg:order-2 lg:block"
         >
-          <div className="absolute -top-10 left-6 h-24 w-24 rounded-full bg-sky/30 blur-3xl" />
-          <div className="absolute -bottom-10 right-10 h-32 w-32 rounded-full bg-gold/20 blur-3xl" />
+          <div className="absolute -top-10 left-6 hidden h-24 w-24 rounded-full bg-sky/30 blur-3xl lg:block" />
+          <div className="absolute -bottom-10 right-10 hidden h-32 w-32 rounded-full bg-gold/20 blur-3xl lg:block" />
 
           {/* Rotating Kaaba Frame */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto flex h-[380px] w-[380px] items-center justify-center"
+            className="relative mx-auto flex h-[220px] w-[220px] items-center justify-center sm:h-[260px] sm:w-[260px] md:h-[320px] md:w-[320px] lg:h-[380px] lg:w-[380px]"
           >
             {/* Outer rotating dashed ring */}
             <motion.div
@@ -276,13 +277,13 @@ export default function Hero() {
             </motion.div>
 
             {/* Glow behind the image */}
-            <div className="absolute h-[280px] w-[280px] rounded-full bg-gold/10 blur-3xl" />
+            <div className="absolute h-[170px] w-[170px] rounded-full bg-gold/10 blur-3xl sm:h-[200px] sm:w-[200px] md:h-[240px] md:w-[240px] lg:h-[280px] lg:w-[280px]" />
 
             {/* Static Kaaba image with gentle float */}
             <motion.div
               animate={{ y: [0, -12, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-              className="relative h-[280px] w-[280px] overflow-hidden rounded-full border-4 border-gold/40 shadow-glass"
+              className="relative h-[170px] w-[170px] overflow-hidden rounded-full border-4 border-gold/40 shadow-glass sm:h-[200px] sm:w-[200px] md:h-[240px] md:w-[240px] lg:h-[280px] lg:w-[280px]"
             >
               <img
                 src="https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1200&auto=format&fit=crop"
@@ -297,46 +298,14 @@ export default function Hero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.8 }}
-              className="glass absolute -bottom-4 flex items-center gap-2 rounded-full px-5 py-2.5 shadow-glass"
+              className="glass absolute -bottom-3 flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2 shadow-glass sm:-bottom-4 sm:gap-2 sm:px-5 sm:py-2.5"
             >
-              <ShieldCheck size={16} className="text-gold" />
-              <span className="text-xs font-semibold text-white">
+              <ShieldCheck size={14} className="shrink-0 text-gold sm:size-4" />
+              <span className="text-[10px] font-semibold text-white sm:text-xs">
                 رحلات موثوقة ومرخّصة
               </span>
             </motion.div>
           </motion.div>
-
-          {/* <div className="glass relative ms-auto w-[340px] animate-float rounded-[2rem] p-7 shadow-glass">
-            <div className="mb-5 flex items-center gap-3">
-              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gold/15 text-gold">
-                <ShieldCheck size={22} />
-              </span>
-              <div>
-                <p className="text-sm font-bold text-white">باقة الماسة الملكية</p>
-                <p className="text-xs text-white/60">إقامة 10 ليالٍ · مكة والمدينة</p>
-              </div>
-            </div>
-            <div className="space-y-3 text-xs text-white/70">
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <span>فندق</span>
-                <span className="font-semibold text-gold-light">برج الساعة فيرمونت</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <span>المسافة عن الحرم</span>
-                <span className="font-semibold text-white">0 متر — إطلالة مباشرة</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>السعر يبدأ من</span>
-                <span className="text-base font-extrabold text-gold">٢٢,٩٠٠ ر.س</span>
-              </div>
-            </div>
-            <a
-              href="#contact"
-              className="mt-6 flex items-center justify-center rounded-full bg-white/10 py-3 text-xs font-semibold text-white transition-colors hover:bg-white/20"
-            >
-              عرض تفاصيل الباقة
-            </a>
-          </div> */}
         </motion.div>
       </div>
 
