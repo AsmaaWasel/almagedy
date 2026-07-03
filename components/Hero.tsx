@@ -96,7 +96,7 @@ export default function Hero() {
         >
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-white/5 px-4 py-2 text-xs font-semibold tracking-wide text-gold-light backdrop-blur-md">
             <Star size={14} className="fill-gold text-gold" />
-            رحلات عمرة فاخرة من الرياض إلى رحاب الحرمين
+            رحلات عمرة يومية من الرياض إلى رحاب الحرمين
           </div>
 
           <h1 className="text-4xl font-extrabold leading-[1.25] text-white sm:text-5xl lg:text-[3.4rem]">
@@ -105,28 +105,32 @@ export default function Hero() {
           </h1>
 
           <p className="mt-6 max-w-xl text-base leading-8 text-white/70 sm:text-lg">
-            نرافقكم خطوة بخطوة في رحلة روحانية استثنائية، فنادق متنوعة 3 نجوم ,4
-            نجوم , 5 نجوم حسب الطلب من العملاء والميزانية .
+            نقدم حملات عمرة مميزة من الرياض إلى مكة المكرمة والمدينة المنورة، مع
+            باقات شاملة تناسب جميع الاحتياجات والميزانيات. نوفر النقل عبر باصات
+            سياحية حديثة موديلات 2025 / 2026 / 2027، بالإضافة إلى الإقامة في
+            فنادق 3 و4 و5 نجوم حسب رغبة العملاء والميزانية .
           </p>
 
           {/* الأزرار الرئيسية */}
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <a
-              href="#contact"
+              href="https://wa.me/966507634181?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B1%D8%AD%D9%84%D8%A9%20%D8%B9%D9%85%D8%B1%D8%A9%20%D9%85%D9%86%20%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-l from-gold to-gold-dark px-8 py-4 text-sm font-bold text-night shadow-gold transition-transform duration-300 hover:scale-105"
             >
-              احجز رحلتك الآن
+              احجز عبر واتساب
               <ArrowLeft
                 size={18}
                 className="transition-transform duration-300 group-hover:-translate-x-1"
               />
             </a>
             <a
-              href="#Programs"
+              href="#offers"
               className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-8 py-4 text-sm font-semibold text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/10"
             >
               <PlayCircle size={18} />
-              تصفّح البرامج
+              تصفّح الباقات
             </a>
           </div>
 
@@ -138,7 +142,7 @@ export default function Hero() {
             className="mt-6 flex flex-wrap items-center gap-3"
           >
             {/* زر الباصات */}
-            <a
+            {/* <a
               href="/buses"
               className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold hover:text-night sm:text-sm sm:px-6 sm:py-3"
             >
@@ -147,10 +151,10 @@ export default function Hero() {
                 className="text-gold transition-colors duration-300 group-hover:text-night"
               />
               الباصات
-            </a>
+            </a> */}
 
             {/* زر الفنادق */}
-            <a
+            {/* <a
               href="/hotels"
               className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold hover:text-night sm:text-sm sm:px-6 sm:py-3"
             >
@@ -159,10 +163,10 @@ export default function Hero() {
                 className="text-gold transition-colors duration-300 group-hover:text-night"
               />
               الفنادق
-            </a>
+            </a> */}
 
             {/* زر البرامج */}
-            <a
+            {/* <a
               href="/Programs"
               className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold hover:text-night sm:text-sm sm:px-6 sm:py-3"
             >
@@ -171,7 +175,7 @@ export default function Hero() {
                 className="text-gold transition-colors duration-300 group-hover:text-night"
               />
               البرامج
-            </a>
+            </a> */}
           </motion.div>
 
           {/* Social Media Links */}

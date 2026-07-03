@@ -9,16 +9,21 @@ import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import VIPBuses from "@/components/Vip";
 import Hotels from "@/components/Hotels";
+import PackagesSection from "@/components/packages";
+import PricingSection from "@/components/Prices";
 
 export default function Home() {
   return (
     <main className="overflow-x-hidden">
       <Navbar />
       <Hero />
+      <PackagesSection />
 
       <Buses />
       <Hotels />
-      <VIPBuses />
+      <PricingSection />
+      {/* <Hotels /> */}
+      {/* <VIPBuses /> */}
 
       <CTA />
       <Footer />
