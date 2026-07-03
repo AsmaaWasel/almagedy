@@ -151,7 +151,7 @@ export default function Hero() {
 
             {/* زر الفنادق */}
             <a
-              href="/vip"
+              href="/hotels"
               className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold hover:text-night sm:text-sm sm:px-6 sm:py-3"
             >
               <Hotel

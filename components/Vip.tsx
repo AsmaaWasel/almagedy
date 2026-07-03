@@ -21,35 +21,28 @@ const PHONE = "tel:+966507634181";
 
 // VIP Bus Images
 const vipBusImages = [
-  "/vip-buses/bus1.jpeg",
-  "/vip-buses/bus2.jpeg",
-  "/vip-buses/bus3.jpeg",
-  "/vip-buses/bus4.jpeg",
   "/vip-buses/bus5.jpeg",
+  "/vip-buses/bus6.jpeg",
+  "/vip-buses/bus7.jpeg",
+  "/vip-buses/bus4.jpeg",
 ];
 
 // Voco Hotel Images
 const vocoHotelImages = [
-  "/voco/voco1.jpeg",
-  "/voco/voco2.jpeg",
   "/voco/voco3.jpeg",
-  "/voco/voco4.jpeg",
   "/voco/voco5.jpeg",
+
   "/voco/voco6.jpeg",
   "/voco/voco7.jpeg",
-  "/voco/voco8.jpeg",
 ];
 
 // Millennium Hotel Images
 const millenniumHotelImages = [
-  "/melenium/melenium1.jpeg",
-  "/melenium/melenium2.jpeg",
   "/melenium/melenium3.jpeg",
   "/melenium/melenium4.jpeg",
-  "/melenium/melenium5.jpeg",
+
   "/melenium/melenium6.jpeg",
-  "/melenium/melenium7.jpeg",
-  "/melenium/melenium8.jpeg",
+
   "/melenium/melenium9.jpeg",
 ];
 
