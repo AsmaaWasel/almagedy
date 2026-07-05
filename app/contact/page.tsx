@@ -54,7 +54,7 @@ export default function ContactPage() {
       icon: Phone,
       title: "اتصال مباشر",
       description: "تحدث مع فريقنا مباشرة",
-      value: "0560856311",
+      value: "0507634181",
       link: "tel:+966507634181",
       color: "from-blue-500 to-blue-600",
       bgColor: "bg-blue-50",
@@ -361,7 +361,8 @@ export default function ContactPage() {
               رحلتك تبدأ برسالة واحدة
             </h2>
             <p className="text-emerald-50/90 mb-6">
-              احجز الآن أو استفسر — فريق درة الهدى في خدمتك.
+              احجز الآن أو استفسر — فريق المجيدي لخدمات المعتمرين والزوار في
+              خدمتك.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
