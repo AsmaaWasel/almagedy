@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Bus,
@@ -23,6 +24,8 @@ import {
   Coffee,
   Monitor,
   Armchair,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -35,6 +38,15 @@ const economyGallery = [
   "/buses/bus1.jpeg",
   "/buses/bus2.jpeg",
   "/buses/bus3.jpeg",
+  "/buses/bus4.jpeg",
+  "/buses/bus5.jpeg",
+  "/buses/bus6.jpeg",
+  "/buses/bus7.jpeg",
+  "/buses/bus8.jpeg",
+  "/buses/bus9.jpeg",
+  "/buses/bus10.jpeg",
+  "/buses/bus11.jpeg",
+  "/buses/bus12.jpeg",
 ];
 
 /* ---------- VIP Bus Images ---------- */
@@ -42,7 +54,115 @@ const vipGallery = [
   "/vip-buses/bus1.jpeg",
   "/vip-buses/bus2.jpeg",
   "/vip-buses/bus3.jpeg",
+  "/vip-buses/bus4.jpeg",
+  "/vip-buses/bus5.jpeg",
+  "/vip-buses/bus6.jpeg",
+  "/vip-buses/bus7.jpeg",
+  "/vip-buses/bus8.jpeg",
 ];
+
+// Component for image carousel with arrows
+function ImageCarousel({
+  images,
+  title,
+  badge,
+}: {
+  images: string[];
+  title: string;
+  badge: string;
+}) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  // Get visible images (3 at a time)
+  const getVisibleImages = () => {
+    const visible = [];
+    for (let i = 0; i < 3; i++) {
+      const index = (currentIndex + i) % images.length;
+      visible.push(index);
+    }
+    return visible;
+  };
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="flex gap-4 overflow-hidden">
+        {getVisibleImages().map((imgIndex, i) => (
+          <motion.div
+            key={imgIndex}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: i * 0.1 }}
+            className="group relative h-64 w-full flex-1 shrink-0 overflow-hidden rounded-[1.75rem] shadow-soft md:h-72"
+          >
+            <div
+              className="h-full w-full scale-105 bg-cover bg-center transition-transform duration-700 group-hover:scale-115"
+              style={{ backgroundImage: `url('${images[imgIndex]}')` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-night/50 via-transparent to-transparent" />
+            {i === 0 && (
+              <span className="absolute bottom-4 right-5 rounded-full bg-gold/90 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
+                {badge}
+              </span>
+            )}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className={`absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-night/70 p-2 text-white backdrop-blur-md transition-all duration-300 hover:bg-night/90 hover:scale-110 ${
+          isHovered ? "opacity-100" : "opacity-0 md:opacity-0"
+        }`}
+        aria-label="Previous"
+      >
+        <ChevronLeft size={24} />
+      </button>
+      <button
+        onClick={nextSlide}
+        className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-night/70 p-2 text-white backdrop-blur-md transition-all duration-300 hover:bg-night/90 hover:scale-110 ${
+          isHovered ? "opacity-100" : "opacity-0 md:opacity-0"
+        }`}
+        aria-label="Next"
+      >
+        <ChevronRight size={24} />
+      </button>
+
+      {/* Dots Indicator */}
+      <div className="mt-4 flex justify-center gap-2">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              index === currentIndex
+                ? "w-8 bg-gold"
+                : "w-2 bg-gold/30 hover:bg-gold/50"
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Buses() {
   return (
@@ -77,32 +197,23 @@ export default function Buses() {
             </div>
           </div>
 
-          {/* Economy Gallery */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8 }}
-            className="grid grid-cols-1 gap-5 md:grid-cols-3"
-          >
-            {economyGallery.map((src, i) => (
-              <div
-                key={src}
-                className="group relative overflow-hidden rounded-[1.75rem] shadow-soft"
-              >
-                <div
-                  className="h-64 w-full scale-105 bg-cover bg-center transition-transform duration-700 group-hover:scale-115 md:h-72"
-                  style={{ backgroundImage: `url('${src}')` }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-night/50 via-transparent to-transparent" />
-                {i === 0 && (
-                  <span className="absolute bottom-4 right-5 rounded-full bg-blue-600/80 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
-                    اقتصادي • 49 مقعد
-                  </span>
-                )}
-              </div>
-            ))}
-          </motion.div>
+          <div className="mb-10 overflow-hidden rounded-[2rem] shadow-soft">
+            <video
+              controls
+              playsInline
+              className="h-[260px] w-full object-cover md:h-[500px]"
+              poster="/buses/poster.jpg"
+            >
+              <source src="/vip-buses/video-vip-buses.mp4" type="video/mp4" />
+            </video>
+          </div>
+
+          {/* Economy Gallery with Carousel */}
+          <ImageCarousel
+            images={economyGallery}
+            title="باص اقتصادي"
+            badge="اقتصادي • 49 مقعد"
+          />
 
           {/* Economy Features Card */}
           <motion.div
@@ -171,7 +282,7 @@ export default function Buses() {
         </div>
 
         {/* ======================================== */}
-        {/* VIP SECTION */}
+        {/* VIP SECTION - Same as Economy with VIP styling */}
         {/* ======================================== */}
         <div className="mt-28">
           <div className="mb-8 flex items-center gap-3">
@@ -188,35 +299,14 @@ export default function Buses() {
             </div>
           </div>
 
-          {/* VIP Gallery */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8 }}
-            className="grid grid-cols-1 gap-5 md:grid-cols-3"
-          >
-            {vipGallery.map((src, i) => (
-              <div
-                key={src}
-                className="group relative overflow-hidden rounded-[1.75rem] shadow-soft"
-              >
-                <div
-                  className="h-64 w-full scale-105 bg-cover bg-center transition-transform duration-700 group-hover:scale-115 md:h-72"
-                  style={{ backgroundImage: `url('${src}')` }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-night/60 via-transparent to-transparent" />
-                {i === 0 && (
-                  <span className="absolute bottom-4 right-5 rounded-full bg-gold/90 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
-                    <Crown size={12} className="inline mr-1" />
-                    VIP • درجة رجال أعمال
-                  </span>
-                )}
-              </div>
-            ))}
-          </motion.div>
+          {/* VIP Gallery with Carousel - Same as Economy */}
+          <ImageCarousel
+            images={vipGallery}
+            title="باص VIP"
+            badge="VIP • درجة رجال أعمال"
+          />
 
-          {/* VIP Features Card */}
+          {/* VIP Features Card - Same as Economy with VIP styling */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
