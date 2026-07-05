@@ -197,17 +197,6 @@ export default function Buses() {
             </div>
           </div>
 
-          <div className="mb-10 overflow-hidden rounded-[2rem] shadow-soft">
-            <video
-              controls
-              playsInline
-              className="h-[260px] w-full object-cover md:h-[500px]"
-              poster="/buses/poster.jpg"
-            >
-              <source src="/vip-buses/video-vip-buses.mp4" type="video/mp4" />
-            </video>
-          </div>
-
           {/* Economy Gallery with Carousel */}
           <ImageCarousel
             images={economyGallery}
@@ -297,6 +286,17 @@ export default function Buses() {
                 أعلى مستوى من الخدمة والراحة
               </p>
             </div>
+          </div>
+
+          <div className="mb-10 overflow-hidden rounded-[2rem] shadow-soft">
+            <video
+              controls
+              playsInline
+              className="h-[260px] w-full object-cover md:h-[500px]"
+              poster="/buses/poster.jpg"
+            >
+              <source src="/vip-buses/video-vip-buses.mp4" type="video/mp4" />
+            </video>
           </div>
 
           {/* VIP Gallery with Carousel - Same as Economy */}
