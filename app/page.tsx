@@ -15,7 +15,6 @@ import PricingSection from "@/components/Prices";
 export default function Home() {
   return (
     <main className="overflow-x-hidden">
-      <Navbar />
       <Hero />
       <PackagesSection />
 
@@ -26,7 +25,7 @@ export default function Home() {
       {/* <VIPBuses /> */}
 
       <CTA />
-      <Footer />
+
       <WhatsAppFloat />
     </main>
   );
