@@ -275,22 +275,15 @@ export default function Hero() {
             >
               {/* الصورة من مجلد public */}
               <img
-                src="/photo.jpg"
+                src="/hero-photo.jpg"
                 alt="الكعبة المشرفة"
                 className="h-full w-full object-cover"
                 onError={(e) => {
                   // في حالة عدم وجود الصورة، استخدم صورة احتياطية
-                  e.currentTarget.src = "/photo.jpg";
+                  e.currentTarget.src = "/logo.jpeg";
                 }}
               />
               <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
-
-              {/* Glass overlay at bottom */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-night/80 via-night/30 to-transparent p-4 pt-8">
-                <p className="text-center text-xs font-semibold text-gold-light">
-                  مكة المكرمة - المدينة المنورة
-                </p>
-              </div>
             </motion.div>
 
             {/* Small badge under the image */}
