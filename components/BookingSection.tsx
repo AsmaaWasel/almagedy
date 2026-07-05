@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Bus,
@@ -20,17 +20,23 @@ import {
   UsersRound,
   ArrowLeft,
   CalendarDays,
+  Building2,
+  Bed,
+  Home,
+  Users as UsersIcon,
 } from "lucide-react";
 
 type PackageType = "economy" | "vip" | "bus-only";
+type AccommodationType = "family" | "single";
+type RoomType = "private" | "shared";
 
 export default function BookingSection() {
   const [step, setStep] = useState(1);
   const [selectedPackage, setSelectedPackage] =
     useState<PackageType>("economy");
-  const [accommodation, setAccommodation] = useState<"family" | "single">(
-    "family",
-  );
+  const [accommodation, setAccommodation] =
+    useState<AccommodationType>("family");
+  const [roomType, setRoomType] = useState<RoomType>("private");
   const [passengers, setPassengers] = useState(1);
   const [tripDuration, setTripDuration] = useState(3);
   const [date, setDate] = useState("");
@@ -38,12 +44,35 @@ export default function BookingSection() {
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
 
+  // تحديد نوع السكن حسب الباقة
+  const getHotelType = () => {
+    switch (selectedPackage) {
+      case "economy":
+        return "🏨 فندق 3 نجوم";
+      case "vip":
+        return "⭐ فندق 5 نجوم";
+      case "bus-only":
+        return "بدون سكن";
+      default:
+        return "";
+    }
+  };
+
+  // هل يظهر خيار السكن؟
+  const showAccommodation = selectedPackage !== "bus-only";
+
+  // الحصول على نص نوع الغرفة
+  const getRoomTypeText = () => {
+    if (accommodation === "family") return "غرفة خاصة (عائلة)";
+    return roomType === "private" ? "غرفة خاصة (فردية)" : "غرفة مشتركة (عزاب)";
+  };
+
   const packages = [
     {
       id: "economy" as PackageType,
       title: "الباقة الاقتصادية",
       icon: Bus,
-
+      hotel: "فندق 3 نجوم",
       features: ["باص حديث 49 مقعداً", "فندق 3 نجوم", "انطلاق شبه يومي"],
       color: "from-blue-500 to-blue-600",
       bgColor: "bg-blue-50",
@@ -54,8 +83,8 @@ export default function BookingSection() {
       id: "vip" as PackageType,
       title: "باقة VIP",
       icon: Crown,
-
-      features: ["باص فاخر 3 صفوف", "فندق 4 أو 5 نجوم", "الاثنين والخميس"],
+      hotel: "فندق 5 نجوم",
+      features: ["باص فاخر 3 صفوف", "فندق 5 نجوم", "الاثنين والخميس"],
       color: "from-amber-500 to-amber-600",
       bgColor: "bg-amber-50",
       borderColor: "border-amber-200",
@@ -65,7 +94,7 @@ export default function BookingSection() {
       id: "bus-only" as PackageType,
       title: "حجز مقاعد باص فقط",
       icon: Users,
-
+      hotel: "بدون سكن",
       features: ["ذهاب وعودة أو اتجاه واحد", "بدون فندق", "مرونة كاملة"],
       color: "from-emerald-500 to-emerald-600",
       bgColor: "bg-emerald-50",
@@ -80,7 +109,8 @@ export default function BookingSection() {
 
 📋 تفاصيل الحجز:
 • الباقة: ${packages.find((p) => p.id === selectedPackage)?.title}
-• نوع السكن: ${accommodation === "family" ? "عائلة (غرفة خاصة)" : "عزاب (سرير في غرفة مشتركة)"}
+• ${showAccommodation ? `نوع السكن: ${accommodation === "family" ? "عائلة (غرفة خاصة)" : `عزاب (${roomType === "private" ? "غرفة خاصة" : "غرفة مشتركة"})`}` : "بدون سكن"}
+• ${getHotelType()}
 • عدد المعتمرين: ${passengers}
 • مدة الرحلة: ${tripDuration} أيام
 • التاريخ المفضل: ${date || "لم يحدد"}
@@ -216,7 +246,9 @@ export default function BookingSection() {
                       <h4 className="text-lg font-bold text-night">
                         {pkg.title}
                       </h4>
-
+                      <p className="mt-1 text-xs font-semibold text-ink/50">
+                        {pkg.hotel}
+                      </p>
                       <ul className="mt-3 space-y-1.5 text-sm text-ink/70">
                         {pkg.features.map((feature, i) => (
                           <li key={i} className="flex items-center gap-2">
@@ -260,53 +292,125 @@ export default function BookingSection() {
                 تفاصيل الرحلة
               </h3>
 
+              {/* Package Info */}
+              <div className="rounded-2xl bg-ivory/50 p-4 border border-ink/10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-ink/60">الباقة المختارة</p>
+                    <p className="font-bold text-night">
+                      {packages.find((p) => p.id === selectedPackage)?.title}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-ink/60">نوع السكن</p>
+                    <p className="font-bold text-gold-dark">{getHotelType()}</p>
+                  </div>
+                </div>
+              </div>
+
               {/* VIP Info */}
               {selectedPackage === "vip" && (
                 <div className="rounded-2xl bg-amber-50 p-4 border border-amber-200">
                   <p className="text-sm text-amber-800">
                     ✨ رحلات VIP تنطلق كل اثنين وخميس أسبوعياً — 3 أيام في مكة
-                    المكرمة (شاملة يومي الذهاب والعودة) مع فندق 4 أو 5 نجوم.
+                    المكرمة (شاملة يومي الذهاب والعودة) مع فندق 5 نجوم.
                   </p>
                 </div>
               )}
 
               <div className="grid gap-6 md:grid-cols-2">
-                {/* Accommodation */}
-                <div>
-                  <label className="mb-2 block text-sm font-bold text-night">
-                    نوع السكن
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      onClick={() => setAccommodation("family")}
-                      className={`rounded-xl border-2 p-4 text-center transition-all duration-300 ${
-                        accommodation === "family"
-                          ? "border-gold bg-gold/10"
-                          : "border-ink/10 hover:border-ink/20"
-                      }`}
-                    >
-                      <Users size={24} className="mx-auto text-gold" />
-                      <p className="mt-1 text-sm font-semibold text-night">
-                        عائلة
-                      </p>
-                      <p className="text-xs text-ink/50">غرفة خاصة</p>
-                    </button>
-                    <button
-                      onClick={() => setAccommodation("single")}
-                      className={`rounded-xl border-2 p-4 text-center transition-all duration-300 ${
-                        accommodation === "single"
-                          ? "border-gold bg-gold/10"
-                          : "border-ink/10 hover:border-ink/20"
-                      }`}
-                    >
-                      <User size={24} className="mx-auto text-gold" />
-                      <p className="mt-1 text-sm font-semibold text-night">
-                        عزاب
-                      </p>
-                      <p className="text-xs text-ink/50">سرير في غرفة مشتركة</p>
-                    </button>
-                  </div>
-                </div>
+                {/* Accommodation - Only show if not bus-only */}
+                {showAccommodation && (
+                  <>
+                    <div className="md:col-span-2">
+                      <label className="mb-2 block text-sm font-bold text-night">
+                        نوع السكن
+                      </label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <button
+                          onClick={() => {
+                            setAccommodation("family");
+                            setRoomType("private");
+                          }}
+                          className={`rounded-xl border-2 p-4 text-center transition-all duration-300 ${
+                            accommodation === "family"
+                              ? "border-gold bg-gold/10"
+                              : "border-ink/10 hover:border-ink/20"
+                          }`}
+                        >
+                          <Building2 size={24} className="mx-auto text-gold" />
+                          <p className="mt-1 text-sm font-semibold text-night">
+                            عائلة
+                          </p>
+                          <p className="text-xs text-ink/50">غرفة خاصة</p>
+                        </button>
+                        <button
+                          onClick={() => {
+                            setAccommodation("single");
+                            setRoomType("private");
+                          }}
+                          className={`rounded-xl border-2 p-4 text-center transition-all duration-300 ${
+                            accommodation === "single"
+                              ? "border-gold bg-gold/10"
+                              : "border-ink/10 hover:border-ink/20"
+                          }`}
+                        >
+                          <Bed size={24} className="mx-auto text-gold" />
+                          <p className="mt-1 text-sm font-semibold text-night">
+                            عزاب
+                          </p>
+                          <p className="text-xs text-ink/50">
+                            {roomType === "private"
+                              ? "غرفة خاصة"
+                              : "غرفة مشتركة"}
+                          </p>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Room Type - Only show if single (عزاب) */}
+                    {accommodation === "single" && (
+                      <div className="md:col-span-2">
+                        <label className="mb-2 block text-sm font-bold text-night">
+                          نوع الغرفة
+                        </label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <button
+                            onClick={() => setRoomType("private")}
+                            className={`rounded-xl border-2 p-4 text-center transition-all duration-300 ${
+                              roomType === "private"
+                                ? "border-gold bg-gold/10"
+                                : "border-ink/10 hover:border-ink/20"
+                            }`}
+                          >
+                            <Home size={24} className="mx-auto text-gold" />
+                            <p className="mt-1 text-sm font-semibold text-night">
+                              غرفة خاصة
+                            </p>
+                            <p className="text-xs text-ink/50">فردية</p>
+                          </button>
+                          <button
+                            onClick={() => setRoomType("shared")}
+                            className={`rounded-xl border-2 p-4 text-center transition-all duration-300 ${
+                              roomType === "shared"
+                                ? "border-gold bg-gold/10"
+                                : "border-ink/10 hover:border-ink/20"
+                            }`}
+                          >
+                            <UsersIcon
+                              size={24}
+                              className="mx-auto text-gold"
+                            />
+                            <p className="mt-1 text-sm font-semibold text-night">
+                              غرفة مشتركة
+                            </p>
+                            <p className="text-xs text-ink/50">مع عزاب آخرين</p>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
 
                 {/* Passengers */}
                 <div>
@@ -334,7 +438,7 @@ export default function BookingSection() {
                   </div>
                 </div>
 
-                {/* Trip Duration - NEW */}
+                {/* Trip Duration */}
                 <div>
                   <label className="mb-2 block text-sm font-bold text-night">
                     مدة الرحلة (عدد الأيام)
@@ -366,7 +470,7 @@ export default function BookingSection() {
                 </div>
 
                 {/* Date */}
-                <div>
+                <div className="md:col-span-2">
                   <label className="mb-2 block text-sm font-bold text-night">
                     التاريخ المفضل (اثنين أو خميس)
                   </label>
@@ -503,9 +607,17 @@ export default function BookingSection() {
                   <div className="flex justify-between border-b border-ink/10 pb-2">
                     <span className="text-ink/60">نوع السكن:</span>
                     <span className="font-semibold text-night">
-                      {accommodation === "family"
-                        ? "عائلة (غرفة خاصة)"
-                        : "عزاب (سرير في غرفة مشتركة)"}
+                      {showAccommodation
+                        ? accommodation === "family"
+                          ? "عائلة (غرفة خاصة)"
+                          : `عزاب (${roomType === "private" ? "غرفة خاصة" : "غرفة مشتركة"})`
+                        : "بدون سكن"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between border-b border-ink/10 pb-2">
+                    <span className="text-ink/60">نوع الفندق:</span>
+                    <span className="font-semibold text-gold-dark">
+                      {getHotelType()}
                     </span>
                   </div>
                   <div className="flex justify-between border-b border-ink/10 pb-2">
