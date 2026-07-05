@@ -14,7 +14,7 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://almagedy-521g.vercel.app"),
+  metadataBase: new URL("https://almagedy-seven.vercel.app/"),
 
   title:
     "المجيدي لخدمات المعتمرين والزوار بالرياض - رحلات يومية بباصات سياحية حديثة",
