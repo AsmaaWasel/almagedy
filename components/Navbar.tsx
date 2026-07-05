@@ -20,7 +20,7 @@ const links = [
   { href: "/economic", label: "الباقة الاقتصادية", icon: ClipboardList },
   { href: "/vip", label: "باقة VIP", icon: Bus },
   { href: "/buses", label: "حجز الباصات", icon: Crown },
-  { href: "#contact", label: "تواصل معنا", icon: Phone },
+  { href: "/contact", label: "تواصل معنا", icon: Phone },
 ];
 
 export default function Navbar() {
