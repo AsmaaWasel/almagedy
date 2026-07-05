@@ -11,6 +11,7 @@ import VIPBuses from "@/components/Vip";
 import Hotels from "@/components/Hotels";
 import PackagesSection from "@/components/packages";
 import PricingSection from "@/components/Prices";
+import PackagesComparison from "@/components/PackagesComparison";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
       <Buses />
       <Hotels />
       <PricingSection />
+      <PackagesComparison />
       {/* <Hotels /> */}
       {/* <VIPBuses /> */}
 

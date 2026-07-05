@@ -288,7 +288,7 @@ export default function Hero() {
               {/* Glass overlay at bottom */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-night/80 via-night/30 to-transparent p-4 pt-8">
                 <p className="text-center text-xs font-semibold text-gold-light">
-                  مكة المكرمة
+                  مكة المكرمة - المدينة المنورة
                 </p>
               </div>
             </motion.div>

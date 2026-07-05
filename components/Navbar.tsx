@@ -17,9 +17,9 @@ import Image from "next/image";
 
 const links = [
   { href: "#home", label: "الرئيسية", icon: Home },
-  { href: "#Programs", label: "البرامج", icon: ClipboardList },
-  { href: "#buses", label: "الباصات", icon: Bus },
-  { href: "#vip", label: "حملة VIP", icon: Crown },
+  { href: "/economic", label: "الباقة الاقتصادية", icon: ClipboardList },
+  { href: "/vip", label: "باقة VIP", icon: Bus },
+  { href: "/buses", label: "حجز الباصات", icon: Crown },
   { href: "#contact", label: "تواصل معنا", icon: Phone },
 ];
 
