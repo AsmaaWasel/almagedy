@@ -44,7 +44,7 @@ export default function ContactPage() {
       icon: MessageCircle,
       title: "واتساب",
       description: "الطريقة الأسرع للاستفسار والحجز",
-      value: "0560856311",
+      value: "0507634181",
       link: "https://wa.me/966507634181",
       color: "from-green-500 to-green-600",
       bgColor: "bg-green-50",
