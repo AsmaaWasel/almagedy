@@ -295,8 +295,8 @@ export default function VipPackagePage() {
               فخامة في كل تفصيلة
             </h2>
             <p className="mt-4 text-amber-100/80 text-base md:text-lg max-w-xl">
-              باص فاخر بثلاثة صفوف و30 مقعداً فقط، وفندق 4 أو 5 نجوم بجوار الحرم
-              — ثلاثة أيام مكرسة بالكامل لعبادتك وراحتك.
+              باص فاخر بثلاثة صفوف و30 مقعداً فقط، وفندق 4 أو 5 نجوم قريبة من
+              الحرم — ثلاثة أيام .
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a
