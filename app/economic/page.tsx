@@ -247,7 +247,7 @@ export default function EconomyPackagePage() {
                 <ChevronLeft size={18} />
               </a>
               <a
-                href="#comparison"
+                href="/vip"
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
               >
                 تبحث عن الفخامة؟ باقة VIP
