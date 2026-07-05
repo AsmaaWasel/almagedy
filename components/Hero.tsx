@@ -23,7 +23,7 @@ function useParallax() {
     const onScroll = () => setY(window.scrollY);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [y]);
   return y;
 }
 
@@ -67,7 +67,7 @@ export default function Hero() {
           className="h-full w-full bg-cover bg-center"
           style={{
             backgroundImage:
-              "radial-gradient(ellipse at 50% 20%, rgba(98,178,227,0.18), transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(200,164,77,0.12), transparent 55%), linear-gradient(180deg, #0B1C2C 0%, #070F18 100%), url('https://images.unsplash.com/photo-1565019011521-254f162e8a32?q=80&w=2000&auto=format&fit=crop')",
+              "radial-gradient(ellipse at 50% 20%, rgba(98,178,227,0.18), transparent 60%), radial-gradient(ellipse at, url('/photo.jpg')",
             backgroundBlendMode: "overlay, overlay, normal, luminosity",
           }}
         />
@@ -133,50 +133,6 @@ export default function Hero() {
               تصفّح الباقات
             </a>
           </div>
-
-          {/* الأزرار الثلاثة الجديدة: الباصات، الفنادق، البرامج */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.7 }}
-            className="mt-6 flex flex-wrap items-center gap-3"
-          >
-            {/* زر الباصات */}
-            {/* <a
-              href="/buses"
-              className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold hover:text-night sm:text-sm sm:px-6 sm:py-3"
-            >
-              <Bus
-                size={16}
-                className="text-gold transition-colors duration-300 group-hover:text-night"
-              />
-              الباصات
-            </a> */}
-
-            {/* زر الفنادق */}
-            {/* <a
-              href="/hotels"
-              className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold hover:text-night sm:text-sm sm:px-6 sm:py-3"
-            >
-              <Hotel
-                size={16}
-                className="text-gold transition-colors duration-300 group-hover:text-night"
-              />
-              الفنادق
-            </a> */}
-
-            {/* زر البرامج */}
-            {/* <a
-              href="/Programs"
-              className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold hover:text-night sm:text-sm sm:px-6 sm:py-3"
-            >
-              <CalendarDays
-                size={16}
-                className="text-gold transition-colors duration-300 group-hover:text-night"
-              />
-              البرامج
-            </a> */}
-          </motion.div>
 
           {/* Social Media Links */}
           <div className="mt-14 border-t border-white/10 pt-8">
@@ -287,7 +243,7 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Floating glass card */}
+        {/* Image Card - Static without rotation */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -297,51 +253,44 @@ export default function Hero() {
           <div className="absolute -top-10 left-6 hidden h-24 w-24 rounded-full bg-sky/30 blur-3xl lg:block" />
           <div className="absolute -bottom-10 right-10 hidden h-32 w-32 rounded-full bg-gold/20 blur-3xl lg:block" />
 
-          {/* Rotating Kaaba Frame */}
+          {/* Static Image Card with frame */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="relative mx-auto flex h-[220px] w-[220px] items-center justify-center sm:h-[260px] sm:w-[260px] md:h-[320px] md:w-[320px] lg:h-[380px] lg:w-[380px]"
           >
-            {/* Outer rotating dashed ring */}
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
-              className="absolute inset-0 rounded-full border border-dashed border-gold/30"
-            />
-
-            {/* Inner rotating ring (opposite direction, slightly smaller) */}
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-              className="absolute inset-6 rounded-full border border-gold/20"
-            />
-
-            {/* Orbiting star/dot on the outer ring */}
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
-              className="absolute inset-0"
-            >
-              <span className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-gold shadow-gold" />
-            </motion.div>
+            {/* Static decorative rings */}
+            <div className="absolute inset-0 rounded-full border border-gold/20" />
+            <div className="absolute inset-6 rounded-full border border-gold/10" />
 
             {/* Glow behind the image */}
             <div className="absolute h-[170px] w-[170px] rounded-full bg-gold/10 blur-3xl sm:h-[200px] sm:w-[200px] md:h-[240px] md:w-[240px] lg:h-[280px] lg:w-[280px]" />
 
-            {/* Static Kaaba image with gentle float */}
+            {/* Image with gentle float and glass frame */}
             <motion.div
-              animate={{ y: [0, -12, 0] }}
-              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-              className="relative h-[170px] w-[170px] overflow-hidden rounded-full border-4 border-gold/40 shadow-glass sm:h-[200px] sm:w-[200px] md:h-[240px] md:w-[240px] lg:h-[280px] lg:w-[280px]"
+              animate={{ y: [0, -8, 0] }}
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+              className="relative h-[170px] w-[170px] overflow-hidden rounded-2xl border-2 border-gold/40 shadow-2xl sm:h-[200px] sm:w-[200px] md:h-[240px] md:w-[240px] lg:h-[280px] lg:w-[280px]"
             >
+              {/* الصورة من مجلد public */}
               <img
-                src="https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1200&auto=format&fit=crop"
+                src="/photo.jpg"
                 alt="الكعبة المشرفة"
                 className="h-full w-full object-cover"
+                onError={(e) => {
+                  // في حالة عدم وجود الصورة، استخدم صورة احتياطية
+                  e.currentTarget.src = "/photo.jpg";
+                }}
               />
-              <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/10" />
+              <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
+
+              {/* Glass overlay at bottom */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-night/80 via-night/30 to-transparent p-4 pt-8">
+                <p className="text-center text-xs font-semibold text-gold-light">
+                  مكة المكرمة
+                </p>
+              </div>
             </motion.div>
 
             {/* Small badge under the image */}
@@ -356,6 +305,12 @@ export default function Hero() {
                 رحلات موثوقة ومرخّصة
               </span>
             </motion.div>
+
+            {/* Decorative corner accents */}
+            <div className="absolute -left-1 -top-1 h-4 w-4 rounded-tl-2xl border-l-2 border-t-2 border-gold/40" />
+            <div className="absolute -right-1 -top-1 h-4 w-4 rounded-tr-2xl border-r-2 border-t-2 border-gold/40" />
+            <div className="absolute -bottom-1 -left-1 h-4 w-4 rounded-bl-2xl border-b-2 border-l-2 border-gold/40" />
+            <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-br-2xl border-b-2 border-r-2 border-gold/40" />
           </motion.div>
         </motion.div>
       </div>
