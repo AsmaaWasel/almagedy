@@ -12,6 +12,7 @@ import Hotels from "@/components/Hotels";
 import PackagesSection from "@/components/packages";
 import PricingSection from "@/components/Prices";
 import PackagesComparison from "@/components/PackagesComparison";
+import HowToBook from "@/components/HowToBook";
 
 export default function Home() {
   return (
@@ -23,8 +24,7 @@ export default function Home() {
       <Hotels />
       <PricingSection />
       <PackagesComparison />
-      {/* <Hotels /> */}
-      {/* <VIPBuses /> */}
+      <HowToBook />
 
       <CTA />
 
