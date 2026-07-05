@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/logo.jpeg",
         width: 1200,
         height: 630,
         alt: "المجيدي لخدمات المعتمرين والزوار بالرياض",
