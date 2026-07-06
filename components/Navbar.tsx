@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const links = [
-  { href: "#home", label: "الرئيسية", icon: Home },
+  { href: "/", label: "الرئيسية", icon: Home },
   { href: "/economic", label: "الباقة الاقتصادية", icon: ClipboardList },
   { href: "/vip", label: "باقة VIP", icon: Bus },
   { href: "/buses", label: "حجز الباصات", icon: Crown },
