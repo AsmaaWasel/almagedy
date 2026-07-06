@@ -307,7 +307,7 @@ export default function VipPackagePage() {
                 <ChevronLeft size={18} />
               </a>
               <Link
-                href="/economy"
+                href="/economic"
                 className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 px-6 py-3 text-sm font-semibold text-amber-200 hover:bg-amber-400/10 transition-colors"
               >
                 الباقة الاقتصادية

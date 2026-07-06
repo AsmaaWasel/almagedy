@@ -289,7 +289,7 @@ export default function EconomyPackagePage() {
               </div>
               <h3 className="font-bold text-night">الفندق</h3>
               <p className="text-sm text-ink/60 mt-1">
-                3 نجوم — غرف نظيفة قريبة من الحرم
+                فندق الباقة 3 نجوم ويمكن اختيار فندق 5 نجوم حسب الرغبة.
               </p>
             </div>
 
