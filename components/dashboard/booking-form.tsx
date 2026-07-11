@@ -1,57 +1,57 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { createBooking } from '@/app/actions/bookings'
-import { getCustomers } from '@/app/actions/customers'
-import { getTrips } from '@/app/actions/trips'
-import { getBuses } from '@/app/actions/buses'
+import { useState } from "react";
+import { createBooking } from "@/app/actions/bookings";
+import { getCustomers } from "@/app/actions/customers";
+import { getTrips } from "@/app/actions/trips";
+import { getBuses } from "@/app/actions/buses";
 
 export default function BookingForm({ onSuccess }: { onSuccess: () => void }) {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    customerId: '',
-    tripId: '',
-    busId: '',
-    numberOfPassengers: '',
-    totalPrice: '',
-    departureDate: '',
-    notes: '',
-  })
+    customerId: "",
+    tripId: "",
+    busId: "",
+    numberOfPassengers: "",
+    totalPrice: "",
+    departureDate: "",
+    notes: "",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
     try {
       await createBooking({
         customerId: parseInt(formData.customerId),
         tripId: parseInt(formData.tripId),
-        busId: formData.busId ? parseInt(formData.busId) : undefined,
+
         numberOfPassengers: parseInt(formData.numberOfPassengers),
         totalPrice: parseFloat(formData.totalPrice),
-        departureDate: formData.departureDate,
+
         notes: formData.notes,
-      })
+      });
 
       setFormData({
-        customerId: '',
-        tripId: '',
-        busId: '',
-        numberOfPassengers: '',
-        totalPrice: '',
-        departureDate: '',
-        notes: '',
-      })
+        customerId: "",
+        tripId: "",
+        busId: "",
+        numberOfPassengers: "",
+        totalPrice: "",
+        departureDate: "",
+        notes: "",
+      });
 
-      onSuccess()
+      onSuccess();
     } catch (err: any) {
-      setError(err.message)
+      setError(err.message);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -86,7 +86,9 @@ export default function BookingForm({ onSuccess }: { onSuccess: () => void }) {
             type="number"
             placeholder="رقم الرحلة"
             value={formData.tripId}
-            onChange={(e) => setFormData({ ...formData, tripId: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, tripId: e.target.value })
+            }
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -148,7 +150,9 @@ export default function BookingForm({ onSuccess }: { onSuccess: () => void }) {
             type="number"
             placeholder="رقم الحافلة"
             value={formData.busId}
-            onChange={(e) => setFormData({ ...formData, busId: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, busId: e.target.value })
+            }
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -160,7 +164,9 @@ export default function BookingForm({ onSuccess }: { onSuccess: () => void }) {
           <textarea
             placeholder="أضف ملاحظات..."
             value={formData.notes}
-            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, notes: e.target.value })
+            }
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={3}
           />
@@ -173,9 +179,9 @@ export default function BookingForm({ onSuccess }: { onSuccess: () => void }) {
           disabled={isLoading}
           className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
         >
-          {isLoading ? 'جاري الحفظ...' : 'حفظ الحجز'}
+          {isLoading ? "جاري الحفظ..." : "حفظ الحجز"}
         </button>
       </div>
     </form>
-  )
+  );
 }
