@@ -16,7 +16,7 @@ export default function Sidebar({ user }: { user: any }) {
     },
     {
       label: "الفنادق",
-      href: "/dashboard/bookings",
+      href: "/dashboard/hotels",
       icon: MapPin,
     },
     {

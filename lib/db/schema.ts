@@ -8,6 +8,7 @@ import {
   decimal,
   json,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 // --- Better Auth required tables -------------------------------------------
 export const user = pgTable("user", {
@@ -142,3 +143,45 @@ export const payments = pgTable("payments", {
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
+
+export const hotels = pgTable("hotels", {
+  id: serial("id").primaryKey(),
+
+  userId: text("userId").notNull(),
+
+  title: text("title").notNull(),
+
+  description: text("description"),
+
+  hotelType: text("hotelType").notNull(), // 3 نجوم - 4 نجوم - 5 نجوم
+
+  packageType: text("packageType").notNull(), // VIP - اقتصادي
+
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export const hotelImages = pgTable("hotelImages", {
+  id: serial("id").primaryKey(),
+
+  hotelId: integer("hotelId")
+    .notNull()
+    .references(() => hotels.id, {
+      onDelete: "cascade",
+    }),
+
+  imageUrl: text("imageUrl").notNull(),
+
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+});
+export const hotelsRelations = relations(hotels, ({ many }) => ({
+  images: many(hotelImages),
+}));
+
+export const hotelImagesRelations = relations(hotelImages, ({ one }) => ({
+  hotel: one(hotels, {
+    fields: [hotelImages.hotelId],
+    references: [hotels.id],
+  }),
+}));
