@@ -1,45 +1,45 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { createBus } from '@/app/actions/buses'
+import { useState } from "react";
+import { createBus } from "@/app/actions/buses";
 
 export default function BusForm({ onSuccess }: { onSuccess: () => void }) {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    name: '',
-    registrationNumber: '',
-    capacity: '',
-    type: '',
-  })
+    name: "",
+    registrationNumber: "",
+    capacity: "",
+    type: "",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
     try {
       await createBus({
         name: formData.name,
-        registrationNumber: formData.registrationNumber,
+        plateNumber: formData.registrationNumber,
         capacity: parseInt(formData.capacity),
         type: formData.type,
-      })
+      });
 
       setFormData({
-        name: '',
-        registrationNumber: '',
-        capacity: '',
-        type: '',
-      })
+        name: "",
+        registrationNumber: "",
+        capacity: "",
+        type: "",
+      });
 
-      onSuccess()
+      onSuccess();
     } catch (err: any) {
-      setError(err.message)
+      setError(err.message);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -121,9 +121,9 @@ export default function BusForm({ onSuccess }: { onSuccess: () => void }) {
           disabled={isLoading}
           className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
         >
-          {isLoading ? 'جاري الحفظ...' : 'حفظ الحافلة'}
+          {isLoading ? "جاري الحفظ..." : "حفظ الحافلة"}
         </button>
       </div>
     </form>
-  )
+  );
 }
