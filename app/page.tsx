@@ -16,7 +16,6 @@ export default function Home() {
   return (
     <main className="overflow-x-hidden">
       <Hero />
-
       <Buses />
       <Hotels />
       <PackagesSection />
