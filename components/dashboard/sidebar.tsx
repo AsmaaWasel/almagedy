@@ -1,45 +1,45 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { BarChart3, Users, MapPin, Bus, LogOut } from 'lucide-react'
-import { authClient } from '@/lib/auth-client'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { BarChart3, Users, MapPin, Bus, LogOut } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 export default function Sidebar({ user }: { user: any }) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const navItems = [
     {
-      label: 'لوحة التحكم',
-      href: '/dashboard',
+      label: "لوحة التحكم",
+      href: "/dashboard",
       icon: BarChart3,
     },
     {
-      label: 'الحجوزات',
-      href: '/dashboard/bookings',
+      label: "الفنادق",
+      href: "/dashboard/bookings",
       icon: MapPin,
     },
     {
-      label: 'العملاء',
-      href: '/dashboard/customers',
+      label: "الباقات",
+      href: "/dashboard/customers",
       icon: Users,
     },
     {
-      label: 'الرحلات',
-      href: '/dashboard/trips',
+      label: "الرحلات",
+      href: "/dashboard/trips",
       icon: MapPin,
     },
     {
-      label: 'الحافلات',
-      href: '/dashboard/buses',
+      label: "الباصات",
+      href: "/dashboard/buses",
       icon: Bus,
     },
-  ]
+  ];
 
   const handleLogout = async () => {
-    await authClient.signOut()
-    window.location.href = '/'
-  }
+    await authClient.signOut();
+    window.location.href = "/";
+  };
 
   return (
     <div className="w-64 bg-gray-900 text-white flex flex-col h-screen">
@@ -50,8 +50,9 @@ export default function Sidebar({ user }: { user: any }) {
 
       <nav className="flex-1 p-6 space-y-2">
         {navItems.map((item) => {
-          const Icon = item.icon
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+          const Icon = item.icon;
+          const isActive =
+            pathname === item.href || pathname.startsWith(item.href + "/");
 
           return (
             <Link
@@ -59,14 +60,14 @@ export default function Sidebar({ user }: { user: any }) {
               href={item.href}
               className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                 isActive
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-300 hover:bg-gray-800'
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-300 hover:bg-gray-800"
               }`}
             >
               <Icon size={20} />
               <span>{item.label}</span>
             </Link>
-          )
+          );
         })}
       </nav>
 
@@ -84,5 +85,5 @@ export default function Sidebar({ user }: { user: any }) {
         </button>
       </div>
     </div>
-  )
+  );
 }
