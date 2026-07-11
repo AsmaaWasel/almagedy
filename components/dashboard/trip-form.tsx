@@ -1,54 +1,57 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { createTrip } from '@/app/actions/trips'
+import { useState } from "react";
+import { createTrip } from "@/app/actions/trips";
 
 export default function TripForm({ onSuccess }: { onSuccess: () => void }) {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    destination: '',
-    startDate: '',
-    endDate: '',
-    price: '',
-    maxCapacity: '',
-  })
+    title: "",
+    description: "",
+    destination: "",
+    startDate: "",
+    endDate: "",
+    price: "",
+    maxCapacity: "",
+    duration: "",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
     try {
       await createTrip({
-        title: formData.title,
+        name: formData.title,
         description: formData.description,
         destination: formData.destination,
         startDate: formData.startDate,
         endDate: formData.endDate,
+        duration: parseInt(formData.duration),
         price: parseFloat(formData.price),
-        maxCapacity: parseInt(formData.maxCapacity),
-      })
+        capacity: parseInt(formData.maxCapacity),
+      });
 
       setFormData({
-        title: '',
-        description: '',
-        destination: '',
-        startDate: '',
-        endDate: '',
-        price: '',
-        maxCapacity: '',
-      })
+        title: "",
+        description: "",
+        destination: "",
+        startDate: "",
+        endDate: "",
+        price: "",
+        maxCapacity: "",
+        duration: "",
+      });
 
-      onSuccess()
+      onSuccess();
     } catch (err: any) {
-      setError(err.message)
+      setError(err.message);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -67,7 +70,9 @@ export default function TripForm({ onSuccess }: { onSuccess: () => void }) {
             type="text"
             placeholder="عنوان الرحلة"
             value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -128,7 +133,9 @@ export default function TripForm({ onSuccess }: { onSuccess: () => void }) {
             placeholder="السعر"
             step="0.01"
             value={formData.price}
-            onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, price: e.target.value })
+            }
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -172,9 +179,9 @@ export default function TripForm({ onSuccess }: { onSuccess: () => void }) {
           disabled={isLoading}
           className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
         >
-          {isLoading ? 'جاري الحفظ...' : 'حفظ الرحلة'}
+          {isLoading ? "جاري الحفظ..." : "حفظ الرحلة"}
         </button>
       </div>
     </form>
-  )
+  );
 }
