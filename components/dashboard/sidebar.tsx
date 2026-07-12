@@ -21,14 +21,10 @@ export default function Sidebar({ user }: { user: any }) {
     },
     {
       label: "الباقات",
-      href: "/dashboard/customers",
+      href: "/dashboard/packages",
       icon: Users,
     },
-    {
-      label: "الرحلات",
-      href: "/dashboard/trips",
-      icon: MapPin,
-    },
+
     {
       label: "الباصات",
       href: "/dashboard/buses",
@@ -44,7 +40,7 @@ export default function Sidebar({ user }: { user: any }) {
   return (
     <div className="w-64 bg-gray-900 text-white flex flex-col h-screen">
       <div className="p-6 border-b border-gray-800">
-        <h1 className="text-2xl font-bold">AlMagedy</h1>
+        <h1 className="text-2xl font-bold">المجيدي لخدمات المعتمرين والزوار</h1>
         <p className="text-gray-400 text-sm">لوحة التحكم</p>
       </div>
 

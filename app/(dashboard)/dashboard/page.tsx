@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { getBookings } from "@/app/actions/bookings";
 import { getCustomerCount } from "@/app/actions/customers";
 import { getTripCount } from "@/app/actions/trips";
-import { getBusCount } from "@/app/actions/buses";
+
 import StatsCard from "@/components/dashboard/stats-card";
 import RecentBookings from "@/components/dashboard/recent-bookings";
 
@@ -12,11 +12,10 @@ export default async function DashboardPage() {
     headers: await headers(),
   });
 
-  const [bookingsData, customerCount, tripCount, busCount] = await Promise.all([
+  const [bookingsData, customerCount, tripCount] = await Promise.all([
     getBookings(1, 5),
     getCustomerCount(),
     getTripCount(),
-    getBusCount(),
   ]);
 
   const bookings = Array.isArray(bookingsData) ? bookingsData : [];
@@ -53,13 +52,6 @@ export default async function DashboardPage() {
           value={Number(tripCount ?? 0)}
           description="الرحلات النشطة"
           color="bg-purple-50"
-        />
-
-        <StatsCard
-          title="الحافلات"
-          value={Number(busCount ?? 0)}
-          description="عدد الحافلات"
-          color="bg-orange-50"
         />
       </div>
 

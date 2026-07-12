@@ -66,16 +66,43 @@ export const verification = pgTable("verification", {
 // Buses table
 export const buses = pgTable("buses", {
   id: serial("id").primaryKey(),
-  userId: text("userId").notNull(),
-  name: text("name").notNull(),
-  plateNumber: text("plateNumber").notNull().unique(),
-  capacity: integer("capacity").notNull(),
-  type: text("type").notNull(), // 'coach', 'minibus', 'luxury'
-  status: text("status").notNull().default("active"), // 'active', 'maintenance', 'inactive'
-  createdAt: timestamp("createdAt").notNull().defaultNow(),
-  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
-});
 
+  userId: text("userId").notNull(),
+
+  title: text("title").notNull(),
+
+  description: text("description"),
+
+  busType: text("busType").notNull(), // vip | economy
+
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+//buses images
+export const busImages = pgTable("busImages", {
+  id: serial("id").primaryKey(),
+
+  busId: integer("busId")
+    .references(() => buses.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+
+  imageUrl: text("imageUrl").notNull(),
+
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export const busesRelations = relations(buses, ({ many }) => ({
+  images: many(busImages),
+}));
+
+export const busImagesRelations = relations(busImages, ({ one }) => ({
+  bus: one(buses, {
+    fields: [busImages.busId],
+    references: [buses.id],
+  }),
+}));
 // Trips/Packages table
 export const trips = pgTable("trips", {
   id: serial("id").primaryKey(),
@@ -185,3 +212,17 @@ export const hotelImagesRelations = relations(hotelImages, ({ one }) => ({
     references: [hotels.id],
   }),
 }));
+
+export const packages = pgTable("packages", {
+  id: serial("id").primaryKey(),
+
+  userId: text("userId").notNull(),
+
+  name: text("name").notNull(),
+
+  description: text("description"),
+
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});

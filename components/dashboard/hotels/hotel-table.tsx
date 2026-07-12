@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
 import HotelActions from "./hotel-actions";
 
 type Hotel = {
@@ -22,21 +21,21 @@ type Props = {
   onEdit?: (id: number) => void;
 };
 
-export default function HotelTable({ hotels, onDelete, onEdit }: Props) {
+export default function HotelTable({ hotels, onEdit }: Props) {
   return (
     <div className="overflow-hidden rounded-xl bg-white shadow">
       <table className="w-full text-right">
         <thead className="bg-gray-50 border-b">
           <tr>
-            <th className="p-4">الصورة</th>
-
             <th className="p-4">اسم الفندق</th>
+
+            <th className="p-4">شرح الفندق</th>
 
             <th className="p-4">نوع الفندق</th>
 
             <th className="p-4">نوع الباقة</th>
 
-            <th className="p-4">الصور</th>
+            <th className="p-4">عدد الصور</th>
 
             <th className="p-4">الإجراءات</th>
           </tr>
@@ -52,25 +51,15 @@ export default function HotelTable({ hotels, onDelete, onEdit }: Props) {
           ) : (
             hotels.map((hotel) => (
               <tr key={hotel.id} className="border-b hover:bg-gray-50">
-                {/* الصورة */}
-                <td className="p-4">
-                  {hotel.images?.[0]?.imageUrl ? (
-                    <Image
-                      src={hotel.images[0].imageUrl}
-                      alt={hotel.title}
-                      width={70}
-                      height={70}
-                      className="rounded-lg object-cover"
-                    />
-                  ) : (
-                    <div className="h-[70px] w-[70px] rounded-lg bg-gray-200 flex items-center justify-center text-xs">
-                      لا يوجد
-                    </div>
-                  )}
-                </td>
-
                 {/* الاسم */}
                 <td className="p-4 font-semibold">{hotel.title}</td>
+
+                {/* الشرح */}
+                <td className="p-4 max-w-xs">
+                  <p className="line-clamp-2 text-gray-600">
+                    {hotel.description || "لا يوجد شرح"}
+                  </p>
+                </td>
 
                 {/* نوع الفندق */}
                 <td className="p-4">

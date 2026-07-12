@@ -2,8 +2,8 @@
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { buses } from "@/lib/db/schema";
-import { and, desc, eq, ilike, count } from "drizzle-orm";
+import { buses, busImages } from "@/lib/db/schema";
+import { and, desc, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
@@ -19,86 +19,102 @@ async function getUserId() {
   return session.user.id;
 }
 
-export async function getBuses(page = 1, limit = 10, search = "") {
+// =========================
+// Get All Buses
+// =========================
+
+export async function getBuses() {
   const userId = await getUserId();
 
-  const offset = (page - 1) * limit;
+  return await db.query.buses.findMany({
+    where: eq(buses.userId, userId),
 
-  const conditions = [eq(buses.userId, userId)];
+    with: {
+      images: true,
+    },
 
-  if (search) {
-    conditions.push(ilike(buses.name, `%${search}%`));
-  }
-
-  const result = await db
-    .select()
-    .from(buses)
-    .where(and(...conditions))
-    .orderBy(desc(buses.createdAt))
-    .limit(limit)
-    .offset(offset);
-
-  return result;
+    orderBy: [desc(buses.createdAt)],
+  });
 }
 
-export async function getBusById(id: number) {
-  const userId = await getUserId();
-
-  const bus = await db
-    .select()
-    .from(buses)
-    .where(and(eq(buses.id, id), eq(buses.userId, userId)))
-    .limit(1);
-
-  return bus[0] || null;
-}
+// =========================
+// Create Bus
+// =========================
 
 export async function createBus(data: {
-  name: string;
-  plateNumber: string;
-  capacity: number;
-  type: string;
+  title: string;
+  description?: string;
+  busType: string;
+  images: string[];
 }) {
   const userId = await getUserId();
 
-  const result = await db.insert(buses).values({
-    userId,
+  const [bus] = await db
+    .insert(buses)
+    .values({
+      userId,
+      title: data.title,
+      description: data.description,
+      busType: data.busType,
+    })
+    .returning();
 
-    name: data.name,
-
-    plateNumber: data.plateNumber,
-
-    capacity: data.capacity,
-
-    type: data.type,
-
-    status: "active",
-  });
+  if (data.images.length) {
+    await db.insert(busImages).values(
+      data.images.map((image) => ({
+        busId: bus.id,
+        imageUrl: image,
+      })),
+    );
+  }
 
   revalidatePath("/dashboard/buses");
 
-  return result;
+  return bus;
 }
+
+// =========================
+// Update Bus
+// =========================
 
 export async function updateBus(
   id: number,
   data: {
-    name?: string;
-    plateNumber?: string;
-    capacity?: number;
-    type?: string;
-    status?: string;
+    title: string;
+    description?: string;
+    busType: string;
+    images: string[];
   },
 ) {
   const userId = await getUserId();
 
   await db
     .update(buses)
-    .set(data)
+    .set({
+      title: data.title,
+      description: data.description,
+      busType: data.busType,
+      updatedAt: new Date(),
+    })
     .where(and(eq(buses.id, id), eq(buses.userId, userId)));
+
+  await db.delete(busImages).where(eq(busImages.busId, id));
+
+  if (data.images.length) {
+    await db.insert(busImages).values(
+      data.images.map((image) => ({
+        busId: id,
+        imageUrl: image,
+      })),
+    );
+  }
 
   revalidatePath("/dashboard/buses");
 }
+
+// =========================
+// Delete Bus
+// =========================
 
 export async function deleteBus(id: number) {
   const userId = await getUserId();
@@ -108,15 +124,22 @@ export async function deleteBus(id: number) {
   revalidatePath("/dashboard/buses");
 }
 
-export async function getBusCount() {
-  const userId = await getUserId();
+export async function getBusById(id: number) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  const result = await db
-    .select({
-      count: count(),
-    })
-    .from(buses)
-    .where(eq(buses.userId, userId));
+  if (!session?.user) {
+    throw new Error("Unauthorized");
+  }
 
-  return Number(result[0]?.count ?? 0);
+  const result = await db.query.buses.findFirst({
+    where: eq(buses.id, id),
+
+    with: {
+      images: true,
+    },
+  });
+
+  return result;
 }
