@@ -37,6 +37,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
       : await authClient.signIn.email({
           email,
           password,
+          callbackURL: "/dashboard",
         });
 
     setLoading(false);
@@ -46,7 +47,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
       return;
     }
 
-    router.push("/");
+    router.push("/dashboard");
     router.refresh();
   };
 
