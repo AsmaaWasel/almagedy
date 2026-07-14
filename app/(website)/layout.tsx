@@ -14,7 +14,6 @@ export default function WebsiteLayout({
       <main>{children}</main>
 
       <Footer />
-
       <WhatsAppFloat />
     </>
   );
