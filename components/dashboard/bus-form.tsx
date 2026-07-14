@@ -7,10 +7,9 @@ export default function BusForm({ onSuccess }: { onSuccess: () => void }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    name: "",
-    registrationNumber: "",
-    capacity: "",
-    type: "",
+    title: "",
+    description: "",
+    busType: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,18 +18,17 @@ export default function BusForm({ onSuccess }: { onSuccess: () => void }) {
     setError("");
 
     try {
-      await createBus({
-        name: formData.name,
-        plateNumber: formData.registrationNumber,
-        capacity: parseInt(formData.capacity),
-        type: formData.type,
-      });
+      const data = new FormData();
+      data.append("title", formData.title);
+      data.append("description", formData.description);
+      data.append("busType", formData.busType);
+
+      await createBus(data);
 
       setFormData({
-        name: "",
-        registrationNumber: "",
-        capacity: "",
-        type: "",
+        title: "",
+        description: "",
+        busType: "",
       });
 
       onSuccess();
@@ -56,24 +54,10 @@ export default function BusForm({ onSuccess }: { onSuccess: () => void }) {
           </label>
           <input
             type="text"
-            placeholder="اسم الحافلة"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            رقم التسجيل
-          </label>
-          <input
-            type="text"
-            placeholder="رقم التسجيل"
-            value={formData.registrationNumber}
+            placeholder="مثال: باص VIP موديل 2026"
+            value={formData.title}
             onChange={(e) =>
-              setFormData({ ...formData, registrationNumber: e.target.value })
+              setFormData({ ...formData, title: e.target.value })
             }
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -82,36 +66,35 @@ export default function BusForm({ onSuccess }: { onSuccess: () => void }) {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            السعة
-          </label>
-          <input
-            type="number"
-            placeholder="عدد المقاعد"
-            value={formData.capacity}
-            onChange={(e) =>
-              setFormData({ ...formData, capacity: e.target.value })
-            }
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            النوع
+            نوع الحافلة
           </label>
           <select
-            value={formData.type}
-            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+            value={formData.busType}
+            onChange={(e) =>
+              setFormData({ ...formData, busType: e.target.value })
+            }
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">اختر النوع</option>
-            <option value="سياحية">سياحية</option>
-            <option value="عادية">عادية</option>
-            <option value="فاخرة">فاخرة</option>
-            <option value="نقل عام">نقل عام</option>
+            <option value="">اختر نوع الباص</option>
+            <option value="vip">VIP</option>
+            <option value="economic">اقتصادي</option>
           </select>
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            الوصف
+          </label>
+          <textarea
+            placeholder="اكتب تفاصيل الباص والخدمات..."
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+            rows={4}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
       </div>
 

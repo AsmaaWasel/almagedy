@@ -2,13 +2,31 @@
 
 import { useState } from "react";
 import { Upload } from "lucide-react";
+import { createBus } from "@/app/actions/buses";
+import { useRouter } from "next/navigation";
 
-type BusFormProps = {
-  onSubmit?: (data: FormData) => void;
+type Bus = {
+  id?: number;
+  title: string;
+  description?: string | null;
+  busType: string;
+  images?: {
+    id?: number;
+    imageUrl: string;
+  }[];
 };
 
-export default function BusForm({ onSubmit }: BusFormProps) {
+type BusFormProps = {
+  bus?: Bus;
+  onSubmit?: (data: FormData) => void | Promise<void>;
+};
+
+export default function BusForm({ bus, onSubmit }: BusFormProps) {
+  const router = useRouter();
+
   const [images, setImages] = useState<File[]>([]);
+
+  const [loading, setLoading] = useState(false);
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -16,17 +34,33 @@ export default function BusForm({ onSubmit }: BusFormProps) {
     setImages(Array.from(e.target.files));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
+    setLoading(true);
 
-    images.forEach((image) => {
-      formData.append("images", image);
-    });
+    try {
+      const formData = new FormData(e.currentTarget);
 
-    onSubmit?.(formData);
-  };
+      images.forEach((image) => {
+        formData.append("images", image);
+      });
+
+      if (onSubmit) {
+        await onSubmit(formData);
+      } else {
+        await createBus(formData);
+      }
+
+      router.push("/dashboard/buses");
+
+      router.refresh();
+    } catch (error) {
+      console.error("Bus submit error:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <form
@@ -40,12 +74,13 @@ export default function BusForm({ onSubmit }: BusFormProps) {
       "
     >
       {/* اسم الباص */}
+
       <div>
         <label className="block mb-2 font-semibold">اسم الباص</label>
 
         <input
           name="title"
-          type="text"
+          defaultValue={bus?.title || ""}
           placeholder="مثال: باص VIP موديل 2026"
           className="
           w-full
@@ -58,11 +93,13 @@ export default function BusForm({ onSubmit }: BusFormProps) {
       </div>
 
       {/* الوصف */}
+
       <div>
         <label className="block mb-2 font-semibold">شرح الباص</label>
 
         <textarea
           name="description"
+          defaultValue={bus?.description || ""}
           placeholder="اكتب تفاصيل الباص والخدمات..."
           rows={5}
           className="
@@ -75,11 +112,13 @@ export default function BusForm({ onSubmit }: BusFormProps) {
       </div>
 
       {/* نوع الباص */}
+
       <div>
         <label className="block mb-2 font-semibold">نوع الباص</label>
 
         <select
           name="busType"
+          defaultValue={bus?.busType || ""}
           className="
           w-full
           rounded-lg
@@ -97,6 +136,7 @@ export default function BusForm({ onSubmit }: BusFormProps) {
       </div>
 
       {/* الصور */}
+
       <div>
         <label className="block mb-2 font-semibold">صور الباص</label>
 
@@ -128,21 +168,16 @@ export default function BusForm({ onSubmit }: BusFormProps) {
         {images.length > 0 && (
           <div className="mt-4 space-y-2">
             {images.map((image) => (
-              <div
-                key={image.name}
-                className="
-                text-sm
-                text-gray-600
-                "
-              >
+              <p key={image.name} className="text-sm text-gray-600">
                 {image.name}
-              </div>
+              </p>
             ))}
           </div>
         )}
       </div>
 
       <button
+        disabled={loading}
         type="submit"
         className="
         w-full
@@ -150,9 +185,10 @@ export default function BusForm({ onSubmit }: BusFormProps) {
         bg-black
         py-3
         text-white
+        disabled:opacity-50
         "
       >
-        حفظ الباص
+        {loading ? "جاري الحفظ..." : bus ? "تعديل الباص" : "حفظ الباص"}
       </button>
     </form>
   );
