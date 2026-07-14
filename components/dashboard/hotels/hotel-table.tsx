@@ -2,7 +2,7 @@
 
 import { Pencil } from "lucide-react";
 import HotelActions from "./hotel-actions";
-
+import { useRouter } from "next/navigation";
 type Hotel = {
   id: number;
   title: string;
@@ -22,6 +22,7 @@ type Props = {
 };
 
 export default function HotelTable({ hotels, onEdit }: Props) {
+  const router = useRouter();
   return (
     <div className="overflow-hidden rounded-xl bg-white shadow">
       <table className="w-full text-right">
@@ -76,13 +77,40 @@ export default function HotelTable({ hotels, onEdit }: Props) {
                 </td>
 
                 {/* عدد الصور */}
-                <td className="p-4">{hotel.images?.length || 0}</td>
+                <td className="p-4">
+                  <button
+                    onClick={() =>
+                      router.push(`/dashboard/hotels/${hotel.id}/images`)
+                    }
+                    className="flex gap-2 cursor-pointer"
+                  >
+                    {hotel.images?.slice(0, 3).map((image) => (
+                      <img
+                        key={image.id}
+                        src={image.imageUrl}
+                        className="w-12 h-12 rounded-lg object-cover hover:opacity-80 transition"
+                      />
+                    ))}
+
+                    {hotel.images.length === 0 && (
+                      <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-xs text-gray-500">
+                        لا يوجد
+                      </div>
+                    )}
+                  </button>
+
+                  <p className="text-sm text-gray-500 mt-2">
+                    {hotel.images.length} صور
+                  </p>
+                </td>
 
                 {/* Actions */}
                 <td className="p-4">
                   <div className="flex gap-3">
                     <button
-                      onClick={() => onEdit?.(hotel.id)}
+                      onClick={() =>
+                        router.push(`/dashboard/hotels/${hotel.id}/images`)
+                      }
                       className="rounded-lg p-2 text-blue-600 hover:bg-blue-50"
                     >
                       <Pencil size={18} />

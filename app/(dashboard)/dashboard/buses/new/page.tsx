@@ -1,28 +1,24 @@
+"use client";
+
+import { createBus } from "@/app/actions/buses";
 import BusForm from "@/components/dashboard/buses/bus-form";
 
+import { useRouter } from "next/navigation";
+
 export default function NewBusPage() {
+  const router = useRouter();
+
+  async function handleCreate(data: FormData) {
+    await createBus(data);
+
+    router.push("/dashboard/buses");
+
+    router.refresh();
+  }
+
   return (
-    <div className="space-y-8" dir="rtl">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">إضافة حافلة جديدة</h1>
-
-        <p className="mt-2 text-gray-500">
-          إضافة بيانات الحافلة والصور الخاصة بها
-        </p>
-      </div>
-
-      {/* Form */}
-      <div
-        className="
-        bg-white
-        rounded-xl
-        shadow-sm
-        p-6
-        "
-      >
-        <BusForm />
-      </div>
+    <div className="p-6">
+      <BusForm onSubmit={handleCreate} />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, Users, MapPin, Bus, LogOut } from "lucide-react";
+import { LayoutDashboard, Hotel, Package, Bus, LogOut } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
 export default function Sidebar({ user }: { user: any }) {
@@ -12,19 +12,18 @@ export default function Sidebar({ user }: { user: any }) {
     {
       label: "لوحة التحكم",
       href: "/dashboard",
-      icon: BarChart3,
+      icon: LayoutDashboard,
     },
     {
       label: "الفنادق",
       href: "/dashboard/hotels",
-      icon: MapPin,
+      icon: Hotel,
     },
     {
       label: "الباقات",
       href: "/dashboard/packages",
-      icon: Users,
+      icon: Package,
     },
-
     {
       label: "الباصات",
       href: "/dashboard/buses",

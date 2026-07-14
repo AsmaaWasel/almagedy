@@ -19,51 +19,101 @@ async function getUserId() {
   return session.user.id;
 }
 
-// =========================
+// ============================
 // Get All Buses
-// =========================
+// ============================
 
 export async function getBuses() {
   const userId = await getUserId();
 
-  return await db.query.buses.findMany({
+  const result = await db.query.buses.findMany({
     where: eq(buses.userId, userId),
 
     with: {
       images: true,
     },
 
-    orderBy: [desc(buses.createdAt)],
+    orderBy: desc(buses.createdAt),
   });
+
+  return result;
 }
 
-// =========================
-// Create Bus
-// =========================
+// ============================
+// Get Bus By ID
+// ============================
 
-export async function createBus(data: {
-  title: string;
-  description?: string;
-  busType: string;
-  images: string[];
-}) {
+export async function getBusById(id: number) {
   const userId = await getUserId();
 
-  const [bus] = await db
+  const bus = await db.query.buses.findFirst({
+    where: and(eq(buses.id, id), eq(buses.userId, userId)),
+
+    with: {
+      images: true,
+    },
+  });
+
+  return bus || null;
+}
+
+// ============================
+// Create Bus
+// ============================
+
+export async function createBus(formData: FormData) {
+  const userId = await getUserId();
+
+  const title = formData.get("title") as string;
+
+  const description = formData.get("description") as string;
+
+  const busType = formData.get("busType") as string;
+
+  const images = formData.getAll("images") as File[];
+
+  const uploadedImages: string[] = [];
+
+  // Upload Images Cloudinary
+
+  for (const image of images) {
+    const uploadData = new FormData();
+
+    uploadData.append("file", image);
+
+    const response = await fetch("http://localhost:3000/api/upload", {
+      method: "POST",
+      body: uploadData,
+    });
+
+    const data = await response.json();
+
+    if (data.url) {
+      uploadedImages.push(data.url);
+    }
+  }
+
+  // Create Bus
+
+  const result = await db
     .insert(buses)
     .values({
       userId,
-      title: data.title,
-      description: data.description,
-      busType: data.busType,
+      title,
+      description,
+      busType,
     })
     .returning();
 
-  if (data.images.length) {
+  const bus = result[0];
+
+  // Save Images
+
+  if (uploadedImages.length > 0) {
     await db.insert(busImages).values(
-      data.images.map((image) => ({
+      uploadedImages.map((url) => ({
         busId: bus.id,
-        imageUrl: image,
+        imageUrl: url,
       })),
     );
   }
@@ -73,73 +123,90 @@ export async function createBus(data: {
   return bus;
 }
 
-// =========================
+// ============================
 // Update Bus
-// =========================
+// ============================
 
 export async function updateBus(
   id: number,
+
   data: {
-    title: string;
+    title?: string;
     description?: string;
-    busType: string;
-    images: string[];
+    busType?: string;
   },
 ) {
   const userId = await getUserId();
 
   await db
     .update(buses)
+
     .set({
-      title: data.title,
-      description: data.description,
-      busType: data.busType,
+      ...data,
       updatedAt: new Date(),
     })
+
     .where(and(eq(buses.id, id), eq(buses.userId, userId)));
-
-  await db.delete(busImages).where(eq(busImages.busId, id));
-
-  if (data.images.length) {
-    await db.insert(busImages).values(
-      data.images.map((image) => ({
-        busId: id,
-        imageUrl: image,
-      })),
-    );
-  }
 
   revalidatePath("/dashboard/buses");
 }
 
-// =========================
+// ============================
 // Delete Bus
-// =========================
+// ============================
 
 export async function deleteBus(id: number) {
   const userId = await getUserId();
 
-  await db.delete(buses).where(and(eq(buses.id, id), eq(buses.userId, userId)));
+  // حذف الصور
+
+  await db
+    .delete(busImages)
+
+    .where(eq(busImages.busId, id));
+
+  // حذف الباص
+
+  await db
+    .delete(buses)
+
+    .where(and(eq(buses.id, id), eq(buses.userId, userId)));
 
   revalidatePath("/dashboard/buses");
 }
 
-export async function getBusById(id: number) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+// ============================
+// Add Bus Image
+// ============================
 
-  if (!session?.user) {
-    throw new Error("Unauthorized");
-  }
+export async function uploadBusImage(data: {
+  busId: number;
+  imageUrl: string;
+}) {
+  const image = await db
+    .insert(busImages)
 
-  const result = await db.query.buses.findFirst({
-    where: eq(buses.id, id),
+    .values({
+      busId: data.busId,
+      imageUrl: data.imageUrl,
+    })
 
-    with: {
-      images: true,
-    },
-  });
+    .returning();
 
-  return result;
+  revalidatePath(`/dashboard/buses/${data.busId}/images`);
+
+  return image[0];
+}
+
+// ============================
+// Delete Bus Image
+// ============================
+
+export async function deleteBusImage(imageId: number) {
+  await db
+    .delete(busImages)
+
+    .where(eq(busImages.id, imageId));
+
+  revalidatePath("/dashboard/buses");
 }

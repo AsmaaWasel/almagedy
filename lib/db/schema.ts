@@ -193,14 +193,14 @@ export const hotelImages = pgTable("hotelImages", {
   id: serial("id").primaryKey(),
 
   hotelId: integer("hotelId")
-    .notNull()
     .references(() => hotels.id, {
       onDelete: "cascade",
-    }),
+    })
+    .notNull(),
 
   imageUrl: text("imageUrl").notNull(),
 
-  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 export const hotelsRelations = relations(hotels, ({ many }) => ({
   images: many(hotelImages),

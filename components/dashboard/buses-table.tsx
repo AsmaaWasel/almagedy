@@ -1,79 +1,147 @@
-import { Edit2, Trash2 } from 'lucide-react'
+"use client";
 
-export default function BusesTable({
-  buses,
-  isLoading,
-  onDelete,
-}: {
-  buses: any[]
-  isLoading: boolean
-  onDelete: (id: number) => void
-}) {
-  if (isLoading) {
-    return (
-      <div className="p-8 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="text-gray-500 mt-2">جاري التحميل...</p>
-      </div>
-    )
-  }
+import { Pencil } from "lucide-react";
+
+import { useRouter } from "next/navigation";
+import BusActions from "./buses/bus-actions";
+
+type Bus = {
+  id: number;
+  title: string;
+  description?: string | null;
+  busType: string;
+  images: {
+    id: number;
+    imageUrl: string;
+  }[];
+};
+
+type Props = {
+  buses: Bus[];
+};
+
+export default function BusTable({ buses }: Props) {
+  const router = useRouter();
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead>
-          <tr className="border-b border-gray-200 bg-gray-50">
-            <th className="text-right text-sm font-semibold text-gray-600 p-4">
-              الاسم
-            </th>
-            <th className="text-right text-sm font-semibold text-gray-600 p-4">
-              رقم التسجيل
-            </th>
-            <th className="text-right text-sm font-semibold text-gray-600 p-4">
-              السعة
-            </th>
-            <th className="text-right text-sm font-semibold text-gray-600 p-4">
-              النوع
-            </th>
-            <th className="text-right text-sm font-semibold text-gray-600 p-4">
-              الإجراءات
-            </th>
+    <div className="overflow-hidden rounded-xl bg-white shadow">
+      <table className="w-full text-right">
+        <thead className="bg-gray-50 border-b">
+          <tr>
+            <th className="p-4">اسم الباص</th>
+
+            <th className="p-4">شرح الباص</th>
+
+            <th className="p-4">نوع الباص</th>
+
+            <th className="p-4">عدد الصور</th>
+
+            <th className="p-4">الإجراءات</th>
           </tr>
         </thead>
+
         <tbody>
-          {buses.length > 0 ? (
+          {buses.length === 0 ? (
+            <tr>
+              <td colSpan={5} className="p-8 text-center text-gray-500">
+                لا يوجد باصات
+              </td>
+            </tr>
+          ) : (
             buses.map((bus) => (
-              <tr key={bus.id} className="border-b border-gray-100">
-                <td className="p-4 text-sm text-gray-900">{bus.name}</td>
-                <td className="p-4 text-sm text-gray-600">
-                  {bus.registrationNumber}
+              <tr key={bus.id} className="border-b hover:bg-gray-50">
+                {/* الاسم */}
+                <td className="p-4 font-semibold">{bus.title}</td>
+
+                {/* الشرح */}
+                <td className="p-4 max-w-xs">
+                  <p className="line-clamp-2 text-gray-600">
+                    {bus.description || "لا يوجد شرح"}
+                  </p>
                 </td>
-                <td className="p-4 text-sm text-gray-600">{bus.capacity}</td>
-                <td className="p-4 text-sm text-gray-600">{bus.type}</td>
+
+                {/* النوع */}
                 <td className="p-4">
-                  <div className="flex gap-2">
-                    <button className="text-blue-600 hover:text-blue-800">
-                      <Edit2 size={16} />
-                    </button>
+                  {bus.busType === "vip" && "VIP"}
+
+                  {bus.busType === "economy" && "اقتصادي"}
+
+                  {!["vip", "economy"].includes(bus.busType) && bus.busType}
+                </td>
+
+                {/* الصور */}
+                <td className="p-4">
+                  <button
+                    onClick={() =>
+                      router.push(`/dashboard/buses/${bus.id}/images`)
+                    }
+                    className="flex gap-2 cursor-pointer"
+                  >
+                    {bus.images?.slice(0, 3).map((image) => (
+                      <img
+                        key={image.id}
+                        src={image.imageUrl}
+                        className="
+                        w-12
+                        h-12
+                        rounded-lg
+                        object-cover
+                        hover:opacity-80
+                        transition
+                        "
+                        alt="bus"
+                      />
+                    ))}
+
+                    {bus.images.length === 0 && (
+                      <div
+                        className="
+                        w-12
+                        h-12
+                        rounded-lg
+                        bg-gray-100
+                        flex
+                        items-center
+                        justify-center
+                        text-xs
+                        text-gray-500
+                        "
+                      >
+                        لا يوجد
+                      </div>
+                    )}
+                  </button>
+
+                  <p className="text-sm text-gray-500 mt-2">
+                    {bus.images.length} صور
+                  </p>
+                </td>
+
+                {/* Actions */}
+                <td className="p-4">
+                  <div className="flex gap-3">
                     <button
-                      onClick={() => onDelete(bus.id)}
-                      className="text-red-600 hover:text-red-800"
+                      onClick={() =>
+                        router.push(`/dashboard/buses/${bus.id}/images`)
+                      }
+                      className="
+                      rounded-lg
+                      p-2
+                      text-blue-600
+                      hover:bg-blue-50
+                      "
                     >
-                      <Trash2 size={16} />
+                      <Pencil size={18} />
                     </button>
+
+                    <BusActions id={bus.id} />
                   </div>
                 </td>
               </tr>
             ))
-          ) : (
-            <tr>
-              <td colSpan={5} className="p-8 text-center text-gray-500 text-sm">
-                لا توجد حافلات
-              </td>
-            </tr>
           )}
         </tbody>
       </table>
     </div>
-  )
+  );
 }

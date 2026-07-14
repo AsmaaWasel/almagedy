@@ -1,205 +1,158 @@
 "use client";
 
 import { useState } from "react";
-import { createBus, updateBus } from "@/app/actions/buses";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { Upload } from "lucide-react";
 
-type Bus = {
-  id?: number;
-  title: string;
-  busType: string;
-  description?: string;
-  images: {
-    imageUrl: string;
-  }[];
+type BusFormProps = {
+  onSubmit?: (data: FormData) => void;
 };
 
-type Props = {
-  bus?: Bus;
-};
+export default function BusForm({ onSubmit }: BusFormProps) {
+  const [images, setImages] = useState<File[]>([]);
 
-export default function BusForm({ bus }: Props) {
-  const router = useRouter();
+  const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
 
-  const [title, setTitle] = useState(bus?.title || "");
-
-  const [busType, setBusType] = useState(bus?.busType || "");
-
-  const [description, setDescription] = useState(bus?.description || "");
-
-  const [images, setImages] = useState<string[]>(
-    bus?.images?.map((img) => img.imageUrl) || [],
-  );
-
-  const [loading, setLoading] = useState(false);
-
-  const uploadImages = async (files: FileList) => {
-    const uploadedUrls: string[] = [];
-
-    for (const file of Array.from(files)) {
-      const formData = new FormData();
-
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      uploadedUrls.push(data.url);
-    }
-
-    setImages((prev) => [...prev, ...uploadedUrls]);
+    setImages(Array.from(e.target.files));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setLoading(true);
+    const formData = new FormData(e.currentTarget);
 
-    try {
-      const data = {
-        title,
-        busType,
-        description,
-        images,
-      };
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
 
-      if (bus?.id) {
-        await updateBus(bus.id, data);
-      } else {
-        await createBus(data);
-      }
-
-      router.push("/dashboard/buses");
-
-      router.refresh();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    onSubmit?.(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="
+      space-y-6
+      bg-white
+      p-6
+      rounded-xl
+      shadow
+      "
+    >
+      {/* اسم الباص */}
       <div>
-        <label className="block mb-2 font-medium">عنوان الباص</label>
+        <label className="block mb-2 font-semibold">اسم الباص</label>
 
         <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          name="title"
+          type="text"
           placeholder="مثال: باص VIP موديل 2026"
           className="
           w-full
           rounded-lg
           border
-          px-4
-          py-3
+          p-3
           "
           required
         />
       </div>
 
+      {/* الوصف */}
       <div>
-        <label className="block mb-2 font-medium">نوع الباص</label>
-
-        <input
-          value={busType}
-          onChange={(e) => setBusType(e.target.value)}
-          placeholder="VIP - اقتصادي"
-          className="
-          w-full
-          rounded-lg
-          border
-          px-4
-          py-3
-          "
-          required
-        />
-      </div>
-
-      <div>
-        <label className="block mb-2 font-medium">وصف الباص</label>
+        <label className="block mb-2 font-semibold">شرح الباص</label>
 
         <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          name="description"
+          placeholder="اكتب تفاصيل الباص والخدمات..."
+          rows={5}
           className="
           w-full
           rounded-lg
           border
-          px-4
-          py-3
-          h-32
-          "
-        />
-      </div>
-
-      <div>
-        <label className="block mb-2 font-medium">صور الباص</label>
-
-        <input
-          type="file"
-          multiple
-          accept="image/*"
-          onChange={(e) => {
-            if (e.target.files) {
-              uploadImages(e.target.files);
-            }
-          }}
-          className="
-          w-full
-          border
-          rounded-lg
           p-3
           "
         />
       </div>
 
-      {/* Preview */}
+      {/* نوع الباص */}
+      <div>
+        <label className="block mb-2 font-semibold">نوع الباص</label>
 
-      {images.length > 0 && (
-        <div
+        <select
+          name="busType"
+          className="
+          w-full
+          rounded-lg
+          border
+          p-3
+          "
+          required
+        >
+          <option value="">اختر نوع الباص</option>
+
+          <option value="vip">VIP</option>
+
+          <option value="economic">اقتصادي</option>
+        </select>
+      </div>
+
+      {/* الصور */}
+      <div>
+        <label className="block mb-2 font-semibold">صور الباص</label>
+
+        <label
           className="
           flex
-          gap-4
-          flex-wrap
+          cursor-pointer
+          items-center
+          gap-3
+          rounded-lg
+          border
+          p-4
+          hover:bg-gray-50
           "
         >
-          {images.map((img, index) => (
-            <div key={index} className="relative">
-              <Image
-                src={img}
-                width={120}
-                height={80}
-                alt="bus"
+          <Upload size={20} />
+
+          <span>اختر صور</span>
+
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            hidden
+            onChange={handleImages}
+          />
+        </label>
+
+        {images.length > 0 && (
+          <div className="mt-4 space-y-2">
+            {images.map((image) => (
+              <div
+                key={image.name}
                 className="
-                    rounded-lg
-                    object-cover
-                    "
-              />
-            </div>
-          ))}
-        </div>
-      )}
+                text-sm
+                text-gray-600
+                "
+              >
+                {image.name}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       <button
-        disabled={loading}
+        type="submit"
         className="
+        w-full
         rounded-lg
         bg-black
-        px-6
         py-3
         text-white
-        hover:bg-gray-800
-        disabled:opacity-50
         "
       >
-        {loading ? "جاري الحفظ..." : bus ? "تعديل الحافلة" : "إضافة الحافلة"}
+        حفظ الباص
       </button>
     </form>
   );

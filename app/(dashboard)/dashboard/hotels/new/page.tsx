@@ -8,14 +8,7 @@ export default function NewHotelPage() {
   const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
-    const data = {
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      hotelType: formData.get("hotelType") as string,
-      packageType: formData.get("packageType") as string,
-    };
-
-    await createHotel(data);
+    await createHotel(formData);
 
     router.push("/dashboard/hotels");
     router.refresh();

@@ -61,32 +61,67 @@ export async function getHotelById(id: number) {
 // Create Hotel
 // ============================
 
-export async function createHotel(data: {
-  title: string;
-  description?: string;
-  hotelType: string;
-  packageType: string;
-}) {
+export async function createHotel(formData: FormData) {
   const userId = await getUserId();
 
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const hotelType = formData.get("hotelType") as string;
+  const packageType = formData.get("packageType") as string;
+
+  const images = formData.getAll("images") as File[];
+
+  console.log("Images count:", images.length);
+
+  // رفع الصور على Cloudinary
+  const uploadedImages: string[] = [];
+
+  for (const image of images) {
+    const uploadData = new FormData();
+
+    uploadData.append("file", image);
+
+    const response = await fetch("http://localhost:3000/api/upload", {
+      method: "POST",
+      body: uploadData,
+    });
+
+    const data = await response.json();
+
+    if (data.url) {
+      uploadedImages.push(data.url);
+    }
+  }
+
+  console.log("Uploaded Images:", uploadedImages);
+
+  // إنشاء الفندق
   const result = await db
     .insert(hotels)
     .values({
       userId,
-
-      title: data.title,
-
-      description: data.description,
-
-      hotelType: data.hotelType,
-
-      packageType: data.packageType,
+      title,
+      description,
+      hotelType,
+      packageType,
     })
     .returning();
 
+  const hotel = result[0];
+
+  // حفظ صور الفندق
+  if (uploadedImages.length > 0) {
+    await db.insert(hotelImages).values(
+      uploadedImages.map((url) => ({
+        hotelId: hotel.id,
+        imageUrl: url,
+      })),
+    );
+  }
+
   revalidatePath("/dashboard/hotels");
 
-  return result[0];
+  return hotel;
 }
 
 // ============================
@@ -186,4 +221,20 @@ export async function deleteHotelImage(imageId: number) {
     .where(eq(hotelImages.id, imageId));
 
   revalidatePath("/dashboard/hotels");
+}
+
+export async function getHotel(id: number) {
+  const hotel = await db.query.hotels.findFirst({
+    where: eq(hotels.id, id),
+
+    with: {
+      images: true,
+    },
+  });
+
+  if (!hotel) {
+    throw new Error("Hotel not found");
+  }
+
+  return hotel;
 }
