@@ -5,9 +5,15 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } },
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>;
+  },
 ) {
-  await db.delete(hotelImages).where(eq(hotelImages.id, Number(params.id)));
+  const { id } = await params;
+
+  await db.delete(hotelImages).where(eq(hotelImages.id, Number(id)));
 
   return NextResponse.json({
     success: true,
