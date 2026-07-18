@@ -62,71 +62,21 @@ export async function getHotelById(id: number) {
 // ============================
 
 export async function createHotel(formData: FormData) {
-  const userId = await getUserId();
+  try {
+    const userId = await getUserId();
 
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const hotelType = formData.get("hotelType") as string;
-  const packageType = formData.get("packageType") as string;
+    const title = formData.get("title") as string;
 
-  const images = formData.getAll("images") as File[];
+    const images = formData.getAll("images") as File[];
 
-  console.log("Images count:", images.length);
+    console.log("TITLE:", title);
+    console.log("IMAGES:", images.length);
 
-  // رفع الصور على Cloudinary
-  const uploadedImages: string[] = [];
-
-  for (const image of images) {
-    const uploadData = new FormData();
-
-    uploadData.append("file", image);
-
-    const baseUrl =
-      process.env.BETTER_AUTH_URL ||
-      process.env.NEXT_PUBLIC_APP_URL ||
-      "http://localhost:3000";
-
-    const response = await fetch(`${baseUrl}/api/upload`, {
-      method: "POST",
-      body: uploadData,
-    });
-
-    const data = await response.json();
-
-    if (data.url) {
-      uploadedImages.push(data.url);
-    }
+    // باقي الكود
+  } catch (error) {
+    console.error("CREATE HOTEL ERROR:", error);
+    throw error;
   }
-
-  console.log("Uploaded Images:", uploadedImages);
-
-  // إنشاء الفندق
-  const result = await db
-    .insert(hotels)
-    .values({
-      userId,
-      title,
-      description,
-      hotelType,
-      packageType,
-    })
-    .returning();
-
-  const hotel = result[0];
-
-  // حفظ صور الفندق
-  if (uploadedImages.length > 0) {
-    await db.insert(hotelImages).values(
-      uploadedImages.map((url) => ({
-        hotelId: hotel.id,
-        imageUrl: url,
-      })),
-    );
-  }
-
-  revalidatePath("/dashboard/hotels");
-
-  return hotel;
 }
 
 // ============================
