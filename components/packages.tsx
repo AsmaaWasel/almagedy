@@ -11,8 +11,22 @@ import {
   ArrowLeft,
   CheckCircle2,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
-const packages = [
+interface Package {
+  id?: number
+  name?: string
+  description?: string
+  title?: string
+  subtitle?: string
+  icon?: any
+  badge?: string
+  features?: string[]
+  button?: string
+  featured?: boolean
+}
+
+const defaultPackages = [
   {
     title: "الباقة الاقتصادية",
     subtitle: "رحلات يومية من الرياض بسعر مناسب",
@@ -57,7 +71,27 @@ const packages = [
   },
 ];
 
-export default function PackagesSection() {
+function PackagesSectionClient() {
+  const [packages, setPackages] = useState<Package[]>([]);
+
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const response = await fetch('/api/public/packages');
+        if (response.ok) {
+          const data = await response.json();
+          setPackages(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch packages:', error);
+      }
+    };
+
+    fetchPackages();
+  }, []);
+
+  const displayPackages = packages.length > 0 ? packages : defaultPackages;
+
   return (
     <section id="offers" className="relative overflow-hidden bg-night py-24">
       {/* Background */}
@@ -88,7 +122,7 @@ export default function PackagesSection() {
 
         {/* Cards */}
         <div className="grid gap-8 lg:grid-cols-3">
-          {packages.map((item, index) => (
+          {displayPackages.map((item, index) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 35 }}
@@ -121,7 +155,7 @@ export default function PackagesSection() {
 
                 {/* Features */}
                 <div className="mt-8 space-y-4">
-                  {item.features.map((feature) => (
+                  {item.features && item.features.map((feature) => (
                     <div
                       key={feature}
                       className="flex items-start gap-3 text-white/90"
@@ -184,4 +218,8 @@ export default function PackagesSection() {
       </div>
     </section>
   );
+}
+
+export default function PackagesSection() {
+  return <PackagesSectionClient />;
 }

@@ -2,16 +2,25 @@
 
 import { motion } from "framer-motion";
 import { Hotel, Crown, MessageCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
-/* ---------- صور فنادق 3 نجوم ---------- */
-const threeStarImages = [
+interface HotelData {
+  id: number
+  title: string
+  description: string
+  hotelType: string
+  packageType: string
+  images: { id: number; imageUrl: string }[]
+}
+
+/* ---------- صور فنادق افتراضية ---------- */
+const defaultThreeStarImages = [
   "/hotels/rezk/rezk1.jpeg",
   "/hotels/rezk/rezk5.jpeg",
   "/hotels/rezk/rezk6.jpeg",
 ];
 
-/* ---------- صور فنادق 5 نجوم ---------- */
-const fiveStarImages = [
+const defaultFiveStarImages = [
   "/melenium/melenium1.jpeg",
   "/melenium/melenium2.jpeg",
   "/melenium/melenium3.jpeg",
@@ -25,7 +34,36 @@ const fiveStarImages = [
 
 const WHATSAPP = "https://wa.me/966507634181";
 
-export default function HotelsGallery() {
+function HotelsGalleryClient() {
+  const [hotels, setHotels] = useState<HotelData[]>([]);
+
+  useEffect(() => {
+    const fetchHotels = async () => {
+      try {
+        const response = await fetch('/api/public/hotels');
+        if (response.ok) {
+          const data = await response.json();
+          setHotels(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch hotels:', error);
+      }
+    };
+
+    fetchHotels();
+  }, []);
+
+  // فرز الفنادق حسب عدد النجوم
+  const threeStarImages = hotels
+    .filter(h => h.hotelType === '3 نجوم')
+    .flatMap(h => h.images.map(img => img.imageUrl))
+    .slice(0, 3);
+
+  const fiveStarImages = hotels
+    .filter(h => h.hotelType === '5 نجوم')
+    .flatMap(h => h.images.map(img => img.imageUrl))
+    .slice(0, 9);
+
   return (
     <section className="bg-ivory py-16">
       <div className="container mx-auto px-4">
@@ -76,7 +114,7 @@ export default function HotelsGallery() {
 
           {/* شبكة الصور - 3 نجوم */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {threeStarImages.map((src, index) => (
+            {(threeStarImages.length > 0 ? threeStarImages : defaultThreeStarImages).map((src, index) => (
               <motion.div
                 key={`3star-${index}`}
                 initial={{ opacity: 0, y: 20 }}
@@ -132,7 +170,7 @@ export default function HotelsGallery() {
 
           {/* شبكة الصور - 5 نجوم */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {fiveStarImages.map((src, index) => (
+            {(fiveStarImages.length > 0 ? fiveStarImages : defaultFiveStarImages).map((src, index) => (
               <motion.div
                 key={`5star-${index}`}
                 initial={{ opacity: 0, y: 20 }}
@@ -157,4 +195,8 @@ export default function HotelsGallery() {
       </div>
     </section>
   );
+}
+
+export default function HotelsGallery() {
+  return <HotelsGalleryClient />;
 }

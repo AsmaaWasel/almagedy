@@ -81,7 +81,9 @@ export async function createBus(formData: FormData) {
 
     uploadData.append("file", image);
 
-    const response = await fetch("http://localhost:3000/api/upload", {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || 'localhost:3000'}`;
+
+    const response = await fetch(`${baseUrl}/api/upload`, {
       method: "POST",
       body: uploadData,
     });

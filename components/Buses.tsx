@@ -1,15 +1,42 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const buses = [
+interface Bus {
+  id: number
+  title: string
+  description: string
+  busType: string
+  images: { id: number; imageUrl: string }[]
+}
+
+const defaultBusImages = [
   "/ecomomicBuses/bus4.jpeg",
   "/ecomomicBuses/bus1.jpg",
   "/ecomomicBuses/bus2.jpeg",
   "/ecomomicBuses/bus3.jpeg",
 ];
+
+function BusesClient({ initialBuses }: { initialBuses: Bus[] }) {
+  const [buses, setBuses] = useState<Bus[]>(initialBuses);
+
+  useEffect(() => {
+    const fetchBuses = async () => {
+      try {
+        const response = await fetch('/api/public/buses');
+        if (response.ok) {
+          const data = await response.json();
+          setBuses(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch buses:', error);
+      }
+    };
+
+    fetchBuses();
+  }, []);
 
 const qasrRizq = [
   "/hotels/rezk/rezk4.jpeg",
@@ -131,7 +158,11 @@ const Slider = ({
   );
 };
 
-export default function EconomicPackageSection() {
+  // الحصول على صور من الباصات المُضافة أو استخدام الصور الافتراضية
+  const busImages = buses.length > 0 && buses[0].images.length > 0
+    ? buses[0].images.map(img => img.imageUrl)
+    : defaultBusImages;
+
   return (
     <section className="bg-white py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 md:px-10">
@@ -160,7 +191,7 @@ export default function EconomicPackageSection() {
           <div className="mt-10 flex justify-center">
             <div className="overflow-hidden rounded-3xl shadow-2xl">
               <Image
-                src={buses[0]}
+                src={busImages[0]}
                 alt="باص سياحي"
                 width={1000}
                 height={600}
@@ -171,7 +202,7 @@ export default function EconomicPackageSection() {
           </div>
 
           {/* معرض الباصات بأسهم */}
-          <Slider images={buses} title="Bus" />
+          <Slider images={busImages} title="Bus" />
         </div>
 
         {/* ================= الفنادق ================= */}
@@ -200,4 +231,8 @@ export default function EconomicPackageSection() {
       </div>
     </section>
   );
+}
+
+export default function EconomicPackageSection() {
+  return <BusesClient initialBuses={[]} />;
 }
