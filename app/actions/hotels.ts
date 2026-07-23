@@ -81,7 +81,7 @@ export async function createHotel(formData: FormData) {
 
     uploadData.append("file", image);
 
-    const response = await fetch("http://localhost:3000/api/upload", {
+    const response = await fetch(`${process.env.BETTER_AUTH_URL}/api/upload`, {
       method: "POST",
       body: uploadData,
     });
