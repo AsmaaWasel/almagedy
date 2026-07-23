@@ -128,34 +128,18 @@ export async function createHotel(formData: FormData) {
 // Update Hotel
 // ============================
 
-export async function updateHotel(
-  id: number,
-
-  data: {
-    title?: string;
-    description?: string;
-    hotelType?: string;
-    packageType?: string;
-  },
-) {
-  const userId = await getUserId();
+export async function updateHotel(formData: FormData) {
+  const id = Number(formData.get("id"));
 
   await db
     .update(hotels)
-
     .set({
-      ...data,
-
-      updatedAt: new Date(),
+      title: String(formData.get("title")),
+      description: String(formData.get("description") || ""),
+      hotelType: String(formData.get("hotelType")),
+      packageType: String(formData.get("packageType")),
     })
-
-    .where(
-      and(
-        eq(hotels.id, id),
-
-        eq(hotels.userId, userId),
-      ),
-    );
+    .where(eq(hotels.id, id));
 
   revalidatePath("/dashboard/hotels");
 }

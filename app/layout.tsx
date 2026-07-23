@@ -1,6 +1,4 @@
-import type { Metadata } from "next";
 import Script from "next/script";
-import { Cairo } from "next/font/google";
 import "./globals.css";
 
 export default function RootLayout({

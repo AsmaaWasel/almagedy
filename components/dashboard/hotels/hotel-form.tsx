@@ -2,12 +2,20 @@
 
 import { useState } from "react";
 import { Upload } from "lucide-react";
+type Hotel = {
+  id: number;
+  title: string;
+  description?: string | null;
+  hotelType: string;
+  packageType: string;
+};
 
 type HotelFormProps = {
   onSubmit?: (data: FormData) => void;
+  initialData?: Hotel;
 };
 
-export default function HotelForm({ onSubmit }: HotelFormProps) {
+export default function HotelForm({ onSubmit, initialData }: HotelFormProps) {
   const [images, setImages] = useState<File[]>([]);
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +24,7 @@ export default function HotelForm({ onSubmit }: HotelFormProps) {
     setImages(Array.from(e.target.files));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -25,14 +33,16 @@ export default function HotelForm({ onSubmit }: HotelFormProps) {
       formData.append("images", image);
     });
 
-    onSubmit?.(formData);
-  };
+    await onSubmit?.(formData);
 
+    window.location.href = "/dashboard/hotels";
+  };
   return (
     <form
       onSubmit={handleSubmit}
       className="space-y-6 bg-white p-6 rounded-xl shadow"
     >
+      {initialData && <input type="hidden" name="id" value={initialData.id} />}
       {/* اسم الفندق */}
       <div>
         <label className="block mb-2 font-semibold">اسم الفندق</label>
@@ -40,6 +50,7 @@ export default function HotelForm({ onSubmit }: HotelFormProps) {
         <input
           name="title"
           type="text"
+          defaultValue={initialData?.title}
           placeholder="مثال: فندق ميلينيوم"
           className="w-full rounded-lg border p-3"
           required
@@ -52,6 +63,7 @@ export default function HotelForm({ onSubmit }: HotelFormProps) {
 
         <textarea
           name="description"
+          defaultValue={initialData?.description ?? ""}
           placeholder="اكتب تفاصيل الفندق والخدمات..."
           rows={5}
           className="w-full rounded-lg border p-3"
@@ -64,6 +76,7 @@ export default function HotelForm({ onSubmit }: HotelFormProps) {
 
         <select
           name="hotelType"
+          defaultValue={initialData?.hotelType}
           className="w-full rounded-lg border p-3"
           required
         >
@@ -83,6 +96,7 @@ export default function HotelForm({ onSubmit }: HotelFormProps) {
 
         <select
           name="packageType"
+          defaultValue={initialData?.packageType}
           className="w-full rounded-lg border p-3"
           required
         >

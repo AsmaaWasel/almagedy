@@ -109,7 +109,7 @@ export default function HotelTable({ hotels, onEdit }: Props) {
                   <div className="flex gap-3">
                     <button
                       onClick={() =>
-                        router.push(`/dashboard/hotels/${hotel.id}/images`)
+                        router.push(`/dashboard/hotels/${hotel.id}/edit`)
                       }
                       className="rounded-lg p-2 text-blue-600 hover:bg-blue-50"
                     >
