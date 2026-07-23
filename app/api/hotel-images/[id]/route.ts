@@ -1,21 +1,32 @@
 import { db } from "@/lib/db";
 import { hotelImages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { NextResponse } from "next/server";
 
-export async function DELETE(
-  req: Request,
-  {
-    params,
-  }: {
-    params: Promise<{ id: string }>;
-  },
-) {
-  const { id } = await params;
+type Props = {
+  params: Promise<{
+    id: string;
+  }>;
+};
 
-  await db.delete(hotelImages).where(eq(hotelImages.id, Number(id)));
+export async function DELETE(req: Request, { params }: Props) {
+  try {
+    const { id } = await params;
 
-  return NextResponse.json({
-    success: true,
-  });
+    await db.delete(hotelImages).where(eq(hotelImages.id, Number(id)));
+
+    return Response.json({
+      success: true,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return Response.json(
+      {
+        error: "Failed to delete image",
+      },
+      {
+        status: 500,
+      },
+    );
+  }
 }

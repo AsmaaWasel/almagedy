@@ -17,6 +17,51 @@ export default function HotelImagesManager({
   images: initialImages,
 }: Props) {
   const [images, setImages] = useState(initialImages);
+  const [loading, setLoading] = useState(false);
+
+  async function uploadImages(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+
+    if (!files) return;
+
+    setLoading(true);
+
+    try {
+      for (const file of Array.from(files)) {
+        const formData = new FormData();
+
+        formData.append("file", file);
+
+        // رفع Cloudinary
+        const uploadResponse = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const uploadData = await uploadResponse.json();
+
+        if (uploadData.url) {
+          // حفظ الصورة في DB
+          const saveResponse = await fetch("/api/hotel-images", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              hotelId,
+              imageUrl: uploadData.url,
+            }),
+          });
+
+          const newImage = await saveResponse.json();
+
+          setImages((prev) => [...prev, newImage]);
+        }
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function deleteImage(id: number) {
     await fetch(`/api/hotel-images/${id}`, {
@@ -28,54 +73,55 @@ export default function HotelImagesManager({
 
   return (
     <div className="space-y-6">
-      <button
+      <label
         className="
-        flex items-center gap-2
+        flex cursor-pointer items-center gap-2
         rounded-lg bg-black
-        px-5 py-3 text-white
+        px-5 py-3 text-white w-fit
         "
       >
         <Upload size={18} />
-        إضافة صور
-      </button>
+
+        {loading ? "جاري الرفع..." : "إضافة صور"}
+
+        <input
+          type="file"
+          hidden
+          multiple
+          accept="image/*"
+          onChange={uploadImages}
+        />
+      </label>
 
       <div
         className="
-      grid grid-cols-2
-      md:grid-cols-4
-      gap-5
-      "
+        grid grid-cols-2
+        md:grid-cols-4
+        gap-5
+        "
       >
         {images.map((image) => (
           <div
             key={image.id}
             className="
-        relative
-        overflow-hidden
-        rounded-xl
-        border
-        "
+            relative overflow-hidden
+            rounded-xl border
+            "
           >
             <img
               src={image.imageUrl}
               className="
-          h-48
-          w-full
-          object-cover
-          "
+              h-48 w-full object-cover
+              "
             />
 
             <button
               onClick={() => deleteImage(image.id)}
               className="
-          absolute
-          top-2
-          right-2
-          rounded-full
-          bg-red-500
-          p-2
-          text-white
-          "
+              absolute top-2 right-2
+              rounded-full bg-red-500
+              p-2 text-white
+              "
             >
               <Trash2 size={18} />
             </button>
