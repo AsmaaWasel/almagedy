@@ -1,7 +1,7 @@
 // app/dashboard/hotels/page.tsx
 
 import Link from "next/link";
-import { getHotels, deleteHotel } from "@/app/actions/hotels";
+import { getHotels } from "@/app/actions/hotels";
 import HotelTable from "@/components/dashboard/hotels/hotel-table";
 import { Plus } from "lucide-react";
 

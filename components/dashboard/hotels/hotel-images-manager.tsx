@@ -2,7 +2,7 @@
 
 import { Trash2, Upload } from "lucide-react";
 import { useState } from "react";
-
+import { uploadHotelImage, deleteHotelImage } from "@/app/actions/hotels";
 type Props = {
   hotelId: number;
 
@@ -19,10 +19,10 @@ export default function HotelImagesManager({
   const [images, setImages] = useState(initialImages);
   const [loading, setLoading] = useState(false);
 
-  async function uploadImages(e: React.ChangeEvent<HTMLInputElement>) {
+  const uploadImages = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
-    if (!files) return;
+    if (!files || files.length === 0) return;
 
     setLoading(true);
 
@@ -32,44 +32,38 @@ export default function HotelImagesManager({
 
         formData.append("file", file);
 
-        // رفع Cloudinary
-        const uploadResponse = await fetch("/api/upload", {
+        const res = await fetch("/api/upload", {
           method: "POST",
           body: formData,
         });
 
-        const uploadData = await uploadResponse.json();
+        const data = await res.json();
 
-        if (uploadData.url) {
-          // حفظ الصورة في DB
-          const saveResponse = await fetch("/api/hotel-images", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              hotelId,
-              imageUrl: uploadData.url,
-            }),
+        if (data.url) {
+          const image = await uploadHotelImage({
+            hotelId,
+            imageUrl: data.url,
           });
 
-          const newImage = await saveResponse.json();
-
-          setImages((prev) => [...prev, newImage]);
+          setImages((prev) => [...prev, image]);
         }
       }
+    } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  async function deleteImage(id: number) {
-    await fetch(`/api/hotel-images/${id}`, {
-      method: "DELETE",
-    });
+  const deleteImage = async (id: number) => {
+    try {
+      await deleteHotelImage(id);
 
-    setImages((prev) => prev.filter((image) => image.id !== id));
-  }
+      setImages((prev) => prev.filter((image) => image.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="space-y-6">

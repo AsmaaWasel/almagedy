@@ -24,15 +24,10 @@ async function getUserId() {
 // ============================
 
 export async function getHotels() {
-  const userId = await getUserId();
-
   const result = await db.query.hotels.findMany({
-    where: eq(hotels.userId, userId),
-
     with: {
       images: true,
     },
-
     orderBy: desc(hotels.createdAt),
   });
 
@@ -72,6 +67,7 @@ export async function createHotel(formData: FormData) {
   const images = formData.getAll("images") as File[];
 
   console.log("Images count:", images.length);
+  console.log(images);
 
   // رفع الصور على Cloudinary
   const uploadedImages: string[] = [];
@@ -85,8 +81,11 @@ export async function createHotel(formData: FormData) {
       method: "POST",
       body: uploadData,
     });
+    console.log("Status:", response.status);
 
     const data = await response.json();
+
+    console.log(data);
 
     if (data.url) {
       uploadedImages.push(data.url);
@@ -144,6 +143,23 @@ export async function updateHotel(formData: FormData) {
   revalidatePath("/dashboard/hotels");
 }
 
+export async function uploadHotelImage(data: {
+  hotelId: number;
+  imageUrl: string;
+}) {
+  const image = await db
+    .insert(hotelImages)
+    .values({
+      hotelId: data.hotelId,
+      imageUrl: data.imageUrl,
+    })
+    .returning();
+
+  revalidatePath(`/dashboard/hotels/${data.hotelId}/images`);
+
+  return image[0];
+}
+
 // ============================
 // Delete Hotel
 // ============================
@@ -151,58 +167,19 @@ export async function updateHotel(formData: FormData) {
 export async function deleteHotel(id: number) {
   const userId = await getUserId();
 
-  // حذف الصور أولاً
-
-  await db
-    .delete(hotelImages)
-
-    .where(eq(hotelImages.hotelId, id));
+  // حذف صور الفندق أولاً
+  await db.delete(hotelImages).where(eq(hotelImages.hotelId, id));
 
   // حذف الفندق
-
   await db
     .delete(hotels)
-
-    .where(
-      and(
-        eq(hotels.id, id),
-
-        eq(hotels.userId, userId),
-      ),
-    );
+    .where(and(eq(hotels.id, id), eq(hotels.userId, userId)));
 
   revalidatePath("/dashboard/hotels");
 }
-
-// ============================
-// Add Hotel Image
-// ============================
-
-export async function uploadHotelImage(data: {
-  hotelId: number;
-  imageUrl: string;
-}) {
-  await db
-    .insert(hotelImages)
-
-    .values({
-      hotelId: data.hotelId,
-
-      imageUrl: data.imageUrl,
-    });
-
-  revalidatePath("/dashboard/hotels");
-}
-
-// ============================
-// Delete Hotel Image
-// ============================
 
 export async function deleteHotelImage(imageId: number) {
-  await db
-    .delete(hotelImages)
-
-    .where(eq(hotelImages.id, imageId));
+  await db.delete(hotelImages).where(eq(hotelImages.id, imageId));
 
   revalidatePath("/dashboard/hotels");
 }
@@ -221,4 +198,14 @@ export async function getHotel(id: number) {
   }
 
   return hotel;
+}
+
+export async function getPublicHotels() {
+  const hotelsData = await db.query.hotels.findMany({
+    with: {
+      images: true,
+    },
+  });
+
+  return hotelsData;
 }

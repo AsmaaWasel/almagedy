@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteHotel } from "@/app/actions/hotels";
+
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 

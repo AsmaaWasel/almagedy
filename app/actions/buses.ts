@@ -24,15 +24,10 @@ async function getUserId() {
 // ============================
 
 export async function getBuses() {
-  const userId = await getUserId();
-
   const result = await db.query.buses.findMany({
-    where: eq(buses.userId, userId),
-
     with: {
       images: true,
     },
-
     orderBy: desc(buses.createdAt),
   });
 

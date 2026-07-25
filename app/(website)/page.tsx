@@ -12,7 +12,7 @@ import HowToBook from "@/components/HowToBook";
 import BookingSection from "@/components/BookingSection";
 import FAQ from "@/components/FAQ";
 
-export default function Home() {
+export default async function Home() {
   return (
     <main className="overflow-x-hidden">
       <Hero />

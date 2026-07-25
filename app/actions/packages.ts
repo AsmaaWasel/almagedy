@@ -20,11 +20,7 @@ async function getUserId() {
 }
 
 export async function getPackages() {
-  const userId = await getUserId();
-
   return await db.query.packages.findMany({
-    where: eq(packages.userId, userId),
-
     orderBy: [desc(packages.createdAt)],
   });
 }
