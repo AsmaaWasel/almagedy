@@ -11,13 +11,16 @@ import PackagesComparison from "@/components/PackagesComparison";
 import HowToBook from "@/components/HowToBook";
 import BookingSection from "@/components/BookingSection";
 import FAQ from "@/components/FAQ";
+import { getPublicHotels } from "../actions/hotels";
 
 export default async function Home() {
+  const hotels = await getPublicHotels();
+
   return (
     <main className="overflow-x-hidden">
       <Hero />
       <Buses />
-      <Hotels />
+      <Hotels hotels={hotels} />
       <PackagesSection />
       <PricingSection />
       <PackagesComparison />

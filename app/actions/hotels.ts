@@ -201,11 +201,15 @@ export async function getHotel(id: number) {
 }
 
 export async function getPublicHotels() {
-  const hotelsData = await db.query.hotels.findMany({
+  console.log("GET PUBLIC HOTELS CALLED");
+
+  const hotels = await db.query.hotels.findMany({
     with: {
       images: true,
     },
   });
 
-  return hotelsData;
+  console.log("HOTELS DATA:", hotels);
+
+  return hotels;
 }
