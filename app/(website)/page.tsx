@@ -27,7 +27,7 @@ export default async function Home() {
       <Buses buses={buses} />
 
       <Hotels hotels={hotels} />
-      <PackagesSection packages={packages} />
+      <PackagesSection />
       <PricingSection />
       <PackagesComparison />
       <HowToBook />
