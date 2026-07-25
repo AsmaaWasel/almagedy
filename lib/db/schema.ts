@@ -218,9 +218,17 @@ export const packages = pgTable("packages", {
 
   userId: text("userId").notNull(),
 
-  name: text("name").notNull(),
+  title: text("title").notNull(),
 
-  description: text("description"),
+  subtitle: text("subtitle"),
+
+  badge: text("badge"),
+
+  button: text("button"),
+
+  packageType: text("packageType").notNull(),
+
+  features: json("features").$type<string[]>().notNull(),
 
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 

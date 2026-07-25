@@ -12,16 +12,22 @@ import HowToBook from "@/components/HowToBook";
 import BookingSection from "@/components/BookingSection";
 import FAQ from "@/components/FAQ";
 import { getPublicHotels } from "../actions/hotels";
+import { getBuses } from "@/app/actions/buses";
+import { getPublicPackages } from "../actions/packages";
 
 export default async function Home() {
   const hotels = await getPublicHotels();
+  const buses = await getBuses();
+  const packages = await getPublicPackages();
+  console.log(packages);
 
   return (
     <main className="overflow-x-hidden">
       <Hero />
-      <Buses />
+      <Buses buses={buses} />
+
       <Hotels hotels={hotels} />
-      <PackagesSection />
+      <PackagesSection packages={packages} />
       <PricingSection />
       <PackagesComparison />
       <HowToBook />

@@ -32,22 +32,33 @@ export async function getPackageById(id: number) {
 }
 
 export async function createPackage(data: {
-  name: string;
-  description?: string;
+  title: string;
+  subtitle: string;
+  badge: string;
+  button: string;
+  packageType: string;
+  features: string[];
 }) {
   const userId = await getUserId();
 
   await db.insert(packages).values({
     userId,
 
-    name: data.name,
+    title: data.title,
 
-    description: data.description,
+    subtitle: data.subtitle,
+
+    badge: data.badge,
+
+    button: data.button,
+
+    packageType: data.packageType,
+
+    features: data.features,
   });
 
   revalidatePath("/dashboard/packages");
 }
-
 export async function updatePackage(
   id: number,
   data: {
@@ -71,4 +82,12 @@ export async function deletePackage(id: number) {
   await db.delete(packages).where(eq(packages.id, id));
 
   revalidatePath("/dashboard/packages");
+}
+
+// app/actions/packages.ts
+
+export async function getPublicPackages() {
+  return await db.query.packages.findMany({
+    orderBy: [desc(packages.createdAt)],
+  });
 }

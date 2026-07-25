@@ -57,6 +57,16 @@ const packages = [
   },
 ];
 
+type Package = {
+  id: number;
+  name: string;
+  description: string | null;
+  packageType: string;
+  badge: string;
+  button: string;
+  features: string[];
+};
+
 export default function PackagesSection() {
   return (
     <section id="offers" className="relative overflow-hidden bg-night py-24">

@@ -62,6 +62,17 @@ const vipGallery = [
   "/vip-buses/bus8.jpeg",
 ];
 
+type BusType = {
+  id: number;
+  title: string;
+  description: string;
+  busType: string;
+  images: {
+    id: number;
+    imageUrl: string;
+  }[];
+};
+
 // Component for image carousel with arrows
 function ImageCarousel({
   images,
@@ -251,7 +262,15 @@ function ImageCarousel({
   );
 }
 
-export default function Buses() {
+export default function Buses({ buses }: { buses: BusType[] }) {
+  const economyBus = buses.find((bus) => bus.busType === "economic");
+
+  const vipBus = buses.find((bus) => bus.busType === "vip");
+
+  const economyGallery =
+    economyBus?.images.map((image) => image.imageUrl) ?? [];
+
+  const vipGallery = vipBus?.images.map((image) => image.imageUrl) ?? [];
   return (
     <section
       id="buses"
@@ -281,10 +300,10 @@ export default function Buses() {
             </div>
             <div>
               <h3 className="text-xl md:text-2xl font-extrabold text-night">
-                باص اقتصادي - 49 مقعد
+                {economyBus?.title ?? "باص اقتصادي"}
               </h3>
               <p className="text-xs md:text-sm text-ink/60">
-                4 صفوف • مريح • سعر مناسب
+                {economyBus?.description}
               </p>
             </div>
           </div>
@@ -388,10 +407,10 @@ export default function Buses() {
             </div>
             <div>
               <h3 className="text-xl md:text-2xl font-extrabold text-night">
-                باصات VIP - درجة رجال الأعمال
+                {vipBus?.title ?? "باص VIP"}
               </h3>
               <p className="text-xs md:text-sm text-ink/60">
-                أعلى مستوى من الخدمة والراحة
+                {vipBus?.description}
               </p>
             </div>
           </div>
