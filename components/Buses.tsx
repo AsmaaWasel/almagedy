@@ -65,14 +65,13 @@ const vipGallery = [
 type BusType = {
   id: number;
   title: string;
-  description: string;
+  description: string | null;
   busType: string;
   images: {
     id: number;
     imageUrl: string;
   }[];
 };
-
 // Component for image carousel with arrows
 function ImageCarousel({
   images,

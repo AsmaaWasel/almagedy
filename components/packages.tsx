@@ -59,15 +59,14 @@ const packages = [
 //commit
 type Package = {
   id: number;
-  name: string;
-  description: string | null;
+  title: string;
+  subtitle: string | null;
+  badge: string | null;
+  button: string | null;
   packageType: string;
-  badge: string;
-  button: string;
   features: string[];
 };
-
-export default function PackagesSection() {
+export default function PackagesSection({ packages }: { packages: Package[] }) {
   return (
     <section id="offers" className="relative overflow-hidden bg-night py-24">
       {/* Background */}
@@ -107,20 +106,26 @@ export default function PackagesSection() {
               viewport={{ once: true }}
               whileHover={{ y: -10 }}
               className={`group relative overflow-hidden rounded-3xl border backdrop-blur-xl transition-all duration-500 ${
-                item.featured
+                item.packageType === "vip"
                   ? "scale-[1.03] border-gold bg-gradient-to-b from-gold/15 to-white/5 shadow-[0_0_40px_rgba(212,175,55,0.18)]"
                   : "border-white/10 bg-white/5 hover:border-gold/40"
               }`}
             >
               {/* Badge */}
               <div className="absolute left-5 top-5 rounded-full bg-gold px-4 py-1 text-xs font-bold text-night">
-                {item.badge}
+                {item.badge || ""}
               </div>
 
               <div className="p-8">
                 {/* Icon */}
                 <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gold to-gold-dark text-night shadow-lg">
-                  {item.icon}
+                  {item.packageType === "vip" ? (
+                    <Crown size={30} />
+                  ) : item.packageType === "seat" ? (
+                    <Ticket size={30} />
+                  ) : (
+                    <Bus size={30} />
+                  )}
                 </div>
 
                 <h3 className="text-2xl font-extrabold text-white">
@@ -153,7 +158,7 @@ export default function PackagesSection() {
                     rel="noopener noreferrer"
                     className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-l from-gold to-gold-dark px-6 py-4 font-bold text-night transition duration-300 hover:scale-105 hover:shadow-xl"
                   >
-                    {item.button}
+                    {item.button || "تفاصيل الباقة"}
                     <ArrowLeft
                       size={18}
                       className="transition group-hover:-translate-x-1"

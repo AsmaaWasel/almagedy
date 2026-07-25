@@ -62,16 +62,23 @@ export async function createPackage(data: {
 export async function updatePackage(
   id: number,
   data: {
-    name: string;
-    description?: string;
+    title: string;
+    subtitle: string;
+    badge: string;
+    button: string;
+    packageType: string;
+    features: string[];
   },
 ) {
   await db
     .update(packages)
     .set({
-      name: data.name,
-
-      description: data.description,
+      title: data.title,
+      subtitle: data.subtitle,
+      badge: data.badge,
+      button: data.button,
+      packageType: data.packageType,
+      features: data.features,
     })
     .where(eq(packages.id, id));
 

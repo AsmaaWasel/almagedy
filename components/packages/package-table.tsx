@@ -6,8 +6,12 @@ import { deletePackage } from "@/app/actions/packages";
 
 type Package = {
   id: number;
-  name: string;
-  description: string | null;
+  title: string;
+  subtitle: string | null;
+  badge: string | null;
+  button: string | null;
+  packageType: string;
+  features: string[];
 };
 
 type Props = {
@@ -66,7 +70,7 @@ export default function PackageTable({ packages }: Props) {
                 font-semibold
                 "
               >
-                {item.name}
+                {item.title}
               </td>
 
               <td
@@ -77,7 +81,7 @@ export default function PackageTable({ packages }: Props) {
                 max-w-md
                 "
               >
-                {item.description || "-"}
+                {item.subtitle}
               </td>
 
               <td className="px-6 py-4">

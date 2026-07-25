@@ -1,10 +1,13 @@
 "use client";
 
-
-import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { deleteHotel } from "@/app/actions/hotels";
 
-export default function HotelActions({ id }: { id: number }) {
+type Props = {
+  id: number;
+};
+
+export default function HotelActions({ id }: Props) {
   const router = useRouter();
 
   async function handleDelete() {
@@ -20,9 +23,9 @@ export default function HotelActions({ id }: { id: number }) {
   return (
     <button
       onClick={handleDelete}
-      className="rounded-lg p-2 text-red-600 hover:bg-red-50"
+      className="rounded-lg bg-red-500 px-4 py-2 text-white"
     >
-      <Trash2 size={18} />
+      حذف
     </button>
   );
 }
