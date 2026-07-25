@@ -6,7 +6,6 @@ import {
   Crown,
   Ticket,
   Hotel,
-  CalendarDays,
   Users,
   ArrowLeft,
   CheckCircle2,
@@ -16,7 +15,7 @@ const packages = [
   {
     title: "الباقة الاقتصادية",
     subtitle: "رحلات يومية من الرياض بسعر مناسب",
-    icon: <Bus size={30} />,
+    packageType: "economic",
     badge: "الأكثر حجزاً",
     features: [
       "النقل عبر باص سياحي حديث",
@@ -28,12 +27,12 @@ const packages = [
     ],
     button: "تفاصيل أكثر عن الباقة والحجز",
   },
+
   {
     title: "باقة VIP",
     subtitle: "رحلتان أسبوعياً (الإثنين والخميس) بمستوى خدمة أعلى",
-    icon: <Crown size={30} />,
+    packageType: "vip",
     badge: "الأكثر رفاهية",
-    featured: true,
     features: [
       "النقل عبر باص VIP حديث",
       "3 صفوف فقط - 30 مقعداً",
@@ -43,10 +42,11 @@ const packages = [
     ],
     button: "تفاصيل باقة VIP والحجز",
   },
+
   {
     title: "حجز مقعد بالباص",
     subtitle: "مقاعد باصات العمرة من الرياض إلى مكة دون سكن",
-    icon: <Ticket size={30} />,
+    packageType: "seat",
     badge: "مرونة أكبر",
     features: [
       "ذهاب وعودة أو اتجاه واحد",
@@ -56,24 +56,13 @@ const packages = [
     button: "تفاصيل حجز المقعد",
   },
 ];
-//commit
-type Package = {
-  id: number;
-  title: string;
-  subtitle: string | null;
-  badge: string | null;
-  button: string | null;
-  packageType: string;
-  features: string[];
-};
-export default function PackagesSection({ packages }: { packages: Package[] }) {
+
+export default function PackagesSection() {
   return (
     <section id="offers" className="relative overflow-hidden bg-night py-24">
-      {/* Background */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.08),transparent_55%)]" />
 
       <div className="container relative z-10">
-        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -95,7 +84,6 @@ export default function PackagesSection({ packages }: { packages: Package[] }) {
           </p>
         </motion.div>
 
-        {/* Cards */}
         <div className="grid gap-8 lg:grid-cols-3">
           {packages.map((item, index) => (
             <motion.div
@@ -111,13 +99,11 @@ export default function PackagesSection({ packages }: { packages: Package[] }) {
                   : "border-white/10 bg-white/5 hover:border-gold/40"
               }`}
             >
-              {/* Badge */}
               <div className="absolute left-5 top-5 rounded-full bg-gold px-4 py-1 text-xs font-bold text-night">
-                {item.badge || ""}
+                {item.badge}
               </div>
 
               <div className="p-8">
-                {/* Icon */}
                 <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gold to-gold-dark text-night shadow-lg">
                   {item.packageType === "vip" ? (
                     <Crown size={30} />
@@ -134,7 +120,6 @@ export default function PackagesSection({ packages }: { packages: Package[] }) {
 
                 <p className="mt-3 leading-7 text-white/70">{item.subtitle}</p>
 
-                {/* Features */}
                 <div className="mt-8 space-y-4">
                   {item.features.map((feature) => (
                     <div
@@ -150,7 +135,6 @@ export default function PackagesSection({ packages }: { packages: Package[] }) {
                   ))}
                 </div>
 
-                {/* Footer */}
                 <div className="mt-10 border-t border-white/10 pt-6">
                   <a
                     href="https://wa.me/966507634181?text=السلام عليكم، أريد معرفة تفاصيل الباقات."
@@ -158,7 +142,7 @@ export default function PackagesSection({ packages }: { packages: Package[] }) {
                     rel="noopener noreferrer"
                     className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-l from-gold to-gold-dark px-6 py-4 font-bold text-night transition duration-300 hover:scale-105 hover:shadow-xl"
                   >
-                    {item.button || "تفاصيل الباقة"}
+                    {item.button}
                     <ArrowLeft
                       size={18}
                       className="transition group-hover:-translate-x-1"
@@ -170,7 +154,6 @@ export default function PackagesSection({ packages }: { packages: Package[] }) {
           ))}
         </div>
 
-        {/* Bottom Features */}
         <div className="mt-20 grid gap-6 md:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur-xl">
             <Bus className="mx-auto mb-4 text-gold" size={32} />
