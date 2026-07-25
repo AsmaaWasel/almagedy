@@ -56,7 +56,7 @@ const packages = [
     button: "تفاصيل حجز المقعد",
   },
 ];
-
+//commit
 type Package = {
   id: number;
   name: string;
