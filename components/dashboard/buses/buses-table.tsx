@@ -3,6 +3,17 @@
 import { Pencil } from "lucide-react";
 import BusActions from "./bus-actions";
 import { useRouter } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type Bus = {
   id: number;
@@ -119,19 +130,44 @@ export default function BusesTable({ buses }: Props) {
                 {/* Actions */}
                 <td className="p-4">
                   <div className="flex gap-3">
-                    <button
-                      onClick={() =>
-                        router.push(`/dashboard/buses/${bus.id}/images`)
-                      }
-                      className="
-                      rounded-lg
-                      p-2
-                      text-blue-600
-                      hover:bg-blue-50
-                      "
-                    >
-                      <Pencil size={18} />
-                    </button>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <button
+                          type="button"
+                          className="rounded-lg p-2 text-blue-600 hover:bg-blue-50"
+                        >
+                          <Pencil size={18} />
+                        </button>
+                      </AlertDialogTrigger>
+
+                      <AlertDialogContent
+                        className="bg-white text-right"
+                        dir="rtl"
+                      >
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            تعديل بيانات الباص
+                          </AlertDialogTitle>
+
+                          <AlertDialogDescription>
+                            هل تريد الانتقال إلى صفحة تعديل هذا الباص؟
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>إلغاء</AlertDialogCancel>
+
+                          <AlertDialogAction
+                            onClick={() =>
+                              router.push(`/dashboard/buses/${bus.id}/edit`)
+                            }
+                            className="bg-blue-600 hover:bg-blue-700"
+                          >
+                            تعديل
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
 
                     <BusActions id={bus.id} />
                   </div>

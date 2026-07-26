@@ -39,11 +39,8 @@ export async function getBuses() {
 // ============================
 
 export async function getBusById(id: number) {
-  const userId = await getUserId();
-
   const bus = await db.query.buses.findFirst({
-    where: and(eq(buses.id, id), eq(buses.userId, userId)),
-
+    where: eq(buses.id, id),
     with: {
       images: true,
     },
@@ -151,23 +148,20 @@ export async function updateBus(
 // ============================
 
 export async function deleteBus(id: number) {
-  const userId = await getUserId();
+  try {
+    // حذف صور الباص أولاً
+    await db.delete(busImages).where(eq(busImages.busId, id));
 
-  // حذف الصور
+    // حذف الباص نفسه
+    await db.delete(buses).where(eq(buses.id, id));
 
-  await db
-    .delete(busImages)
+    revalidatePath("/dashboard/buses");
 
-    .where(eq(busImages.busId, id));
-
-  // حذف الباص
-
-  await db
-    .delete(buses)
-
-    .where(and(eq(buses.id, id), eq(buses.userId, userId)));
-
-  revalidatePath("/dashboard/buses");
+    return { success: true };
+  } catch (error) {
+    console.error("Delete bus error:", error);
+    throw new Error("Failed to delete bus");
+  }
 }
 
 // ============================

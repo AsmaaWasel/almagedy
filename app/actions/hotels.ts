@@ -165,15 +165,11 @@ export async function uploadHotelImage(data: {
 // ============================
 
 export async function deleteHotel(id: number) {
-  const userId = await getUserId();
-
   // حذف صور الفندق أولاً
   await db.delete(hotelImages).where(eq(hotelImages.hotelId, id));
 
   // حذف الفندق
-  await db
-    .delete(hotels)
-    .where(and(eq(hotels.id, id), eq(hotels.userId, userId)));
+  await db.delete(hotels).where(eq(hotels.id, id));
 
   revalidatePath("/dashboard/hotels");
 }

@@ -19,11 +19,11 @@ export default function Sidebar({ user }: { user: any }) {
       href: "/dashboard/hotels",
       icon: Hotel,
     },
-    {
-      label: "الباقات",
-      href: "/dashboard/packages",
-      icon: Package,
-    },
+    // {
+    //   label: "الباقات",
+    //   href: "/dashboard/packages",
+    //   icon: Package,
+    // },
     {
       label: "الباصات",
       href: "/dashboard/buses",

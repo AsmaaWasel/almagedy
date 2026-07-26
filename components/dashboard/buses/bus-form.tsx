@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Upload } from "lucide-react";
 import { createBus } from "@/app/actions/buses";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type Bus = {
   id?: number;
@@ -39,6 +40,10 @@ export default function BusForm({ bus, onSubmit }: BusFormProps) {
 
     setLoading(true);
 
+    const loadingToast = toast.loading(
+      bus ? "جاري تعديل الباص..." : "جاري إضافة الباص...",
+    );
+
     try {
       const formData = new FormData(e.currentTarget);
 
@@ -52,11 +57,20 @@ export default function BusForm({ bus, onSubmit }: BusFormProps) {
         await createBus(formData);
       }
 
-      router.push("/dashboard/buses");
+      toast.dismiss(loadingToast);
 
+      toast.success(
+        bus ? "تم تعديل الباص بنجاح 🎉" : "تم إضافة الباص بنجاح 🎉",
+      );
+
+      router.push("/dashboard/buses");
       router.refresh();
     } catch (error) {
       console.error("Bus submit error:", error);
+
+      toast.dismiss(loadingToast);
+
+      toast.error("حدث خطأ أثناء حفظ الباص");
     } finally {
       setLoading(false);
     }

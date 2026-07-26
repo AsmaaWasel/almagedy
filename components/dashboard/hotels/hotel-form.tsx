@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Upload } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 type Hotel = {
   id: number;
   title: string;
@@ -17,6 +19,8 @@ type HotelFormProps = {
 
 export default function HotelForm({ onSubmit, initialData }: HotelFormProps) {
   const [images, setImages] = useState<File[]>([]);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -27,15 +31,38 @@ export default function HotelForm({ onSubmit, initialData }: HotelFormProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
+    setLoading(true);
 
-    images.forEach((image) => {
-      formData.append("images", image);
-    });
+    const loadingToast = toast.loading(
+      initialData ? "جاري تعديل الفندق..." : "جاري إضافة الفندق...",
+    );
 
-    await onSubmit?.(formData);
+    try {
+      const formData = new FormData(e.currentTarget);
 
-    window.location.href = "/dashboard/hotels";
+      images.forEach((image) => {
+        formData.append("images", image);
+      });
+
+      await onSubmit?.(formData);
+
+      toast.dismiss(loadingToast);
+
+      toast.success(
+        initialData ? "تم تعديل الفندق بنجاح 🎉" : "تم إضافة الفندق بنجاح 🎉",
+      );
+
+      router.push("/dashboard/hotels");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+
+      toast.dismiss(loadingToast);
+
+      toast.error("حدث خطأ أثناء حفظ الفندق");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <form
