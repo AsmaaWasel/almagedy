@@ -40,10 +40,8 @@ export default function BusActions({ id }: { id: number }) {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <button className="rounded-lg p-2 text-red-600 hover:bg-red-50">
-          <Trash2 size={18} />
-        </button>
+      <AlertDialogTrigger className="rounded-lg p-2 text-red-600 hover:bg-red-50">
+        <Trash2 size={18} />
       </AlertDialogTrigger>
 
       <AlertDialogContent className="bg-white text-right" dir="rtl">

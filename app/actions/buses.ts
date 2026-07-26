@@ -39,12 +39,16 @@ export async function getBuses() {
 // ============================
 
 export async function getBusById(id: number) {
+  console.log("Searching bus id:", id);
+
   const bus = await db.query.buses.findFirst({
     where: eq(buses.id, id),
     with: {
       images: true,
     },
   });
+
+  console.log("Result:", bus);
 
   return bus || null;
 }

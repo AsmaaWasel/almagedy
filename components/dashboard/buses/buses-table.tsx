@@ -131,13 +131,8 @@ export default function BusesTable({ buses }: Props) {
                 <td className="p-4">
                   <div className="flex gap-3">
                     <AlertDialog>
-                      <AlertDialogTrigger>
-                        <button
-                          type="button"
-                          className="rounded-lg p-2 text-blue-600 hover:bg-blue-50"
-                        >
-                          <Pencil size={18} />
-                        </button>
+                      <AlertDialogTrigger className="rounded-lg p-2 text-blue-600 hover:bg-blue-50">
+                        <Pencil size={18} />
                       </AlertDialogTrigger>
 
                       <AlertDialogContent
