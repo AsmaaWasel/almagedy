@@ -14,6 +14,8 @@ import FAQ from "@/components/FAQ";
 import { getPublicHotels } from "../actions/hotels";
 import { getBuses } from "@/app/actions/buses";
 import { getPublicPackages } from "../actions/packages";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function Home() {
   const hotels = await getPublicHotels();
