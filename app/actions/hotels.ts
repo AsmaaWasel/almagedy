@@ -204,7 +204,7 @@ export async function getPublicHotels() {
       images: true,
     },
   });
-
+  console.log(hotels);
   console.log("HOTELS DATA:", hotels);
 
   return hotels;
