@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Upload } from "lucide-react";
-import { createBus } from "@/app/actions/buses";
+import { createBus, updateBus } from "@/app/actions/buses";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -53,6 +53,12 @@ export default function BusForm({ bus, onSubmit }: BusFormProps) {
 
       if (onSubmit) {
         await onSubmit(formData);
+      } else if (bus?.id) {
+        await updateBus(bus.id, {
+          title: formData.get("title") as string,
+          description: formData.get("description") as string,
+          busType: formData.get("busType") as string,
+        });
       } else {
         await createBus(formData);
       }
